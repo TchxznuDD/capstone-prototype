@@ -1,95 +1,29 @@
 /* BackupHistory specific styles to match Computer dashboard spacing and card layout */
 
-/* Page root spacing to match Computer.css */
-.backup-root {
-  padding: 20px;
-}
-
-.backup-history .hero-row {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  margin-bottom:32px;
-  border-bottom:1.5px solid rgba(0,0,0,0.06);
-  padding-bottom:18px;
-}
-
-.backup-history .page-hero {
-  margin-top: 12px;
-  padding: 6px 6px 0 6px;
-  display: block;
-  text-align: left !important;
-}
-
-.backup-history .page-hero.header-text {
-  text-align: left !important;
-}
-
-.backup-history .hero-text {
-  text-align: left !important;
-}
+/* Page root spacing removed - now handled in BackupManagement.css */
 
 .backup-history .hero-text h2 {
   margin: 0;
   font-size: 36px;
   font-weight: 900;
-  color: #fff;
+  color: #1a202c;
   line-height: 1.05;
-  text-align: left !important;
 }
 
 .backup-history .hero-text p {
   margin: 8px 0 0 0;
-  color: rgba(255,255,255,0.95);
+  color: #4a5568;
   font-size: 14px;
-  text-align: left !important;
-}
-
-/* Main content padding to match dashboard margins */
-
-/* Match Computer.css inner content horizontal padding (use same as BackupManagement) */
-.backup-history main {
-    padding: 0 2px 40px 2px !important;
-  box-sizing: border-box;
-}
-
-/* Center content and constrain width to match other dashboard sections */
-.backup-history main {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.backup-history .page-hero,
-.backup-history .external-refresh,
-.backup-history .card {
-  width: 100%;
-  max-width: none;
-  box-sizing: border-box;
 }
 
 /* Card defaults consistent with Computer view */
 .backup-history .card {
-  /* use same inner padding as BackupManagement cards */
   padding: 18px;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(15,23,42,0.06);
   background: #fff;
   margin-bottom: 18px;
   box-sizing: border-box;
-}
-
-/* Enforce small left nudge with high specificity to override other rules or caching issues */
-.dashboard-root.backup-root.backup-history .card {
-  margin-left: -2px !important;
-}
-
-/* Ensure the small time under dates looks consistent */
-.backup-history .hi-time {
-  font-size: 12px;
-  color: #777;
-  margin-top: 6px;
 }
 
 /* Day entries and actions spacing */
@@ -100,23 +34,3 @@
 
 /* Buttons in the history card should sit at the bottom-right */
 .backup-history .hi-actions { display:flex; gap:8px }
-
-/* Override any global hero-row styles */
-.backup-history .hero-row .page-hero {
-  display: block !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-}
-
-.backup-history .hero-row .page-hero,
-.backup-history .hero-row .page-hero.header-text,
-.backup-history .hero-row .hero-text,
-.backup-history .hero-row .hero-text h2,
-.backup-history .hero-row .hero-text p {
-  text-align: left !important;
-}
-
-/* Responsive guard */
-@media (max-width: 980px) {
-  .backup-history main { padding: 0 12px 30px 12px !important; }
-}

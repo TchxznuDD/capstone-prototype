@@ -1,7 +1,7 @@
 /* Firewall Monitor Dashboard Styles */
 
 .firewall-monitor-root {
-  padding: 20px;
+  padding: 0;
 }
 
 /* Hero Section with Actions */
@@ -43,7 +43,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 24px;
+  padding: 0 48px;
 }
 
 .stat-card {
@@ -156,6 +157,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 12px;
+  padding: 0 48px;
 }
 
 /* Charts Grid - Mixed Layout (2 top, 1 full bottom) */
@@ -163,7 +165,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 24px;
+  padding: 0 48px 48px 48px;
 }
 
 .chart-full-width {
@@ -195,7 +198,7 @@
 }
 
 .chart-card .card-header {
-  padding: 12px 14px 8px 14px;
+  padding: 12px 16px 12px 16px;
   border-bottom: 1.5px solid rgba(0,0,0,0.06);
   min-height: 50px;
 }
@@ -243,7 +246,9 @@
 
 /* Monitor Tables */
 .monitor-table {
-  margin-top: 12px;
+  margin-top: 24px;
+  margin-left: 48px;
+  margin-right: 48px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(15,23,42,0.06);
@@ -251,7 +256,7 @@
 }
 
 .monitor-table .card-header {
-  padding: 12px 16px;
+  padding: 12px 16px 12px 16px;
   border-bottom: 1.5px solid rgba(0,0,0,0.06);
   display: flex;
   justify-content: space-between;
@@ -426,7 +431,9 @@
 
 /* Filter Card */
 .filter-card {
-  margin-top: 12px;
+  margin-top: 24px;
+  margin-left: 48px;
+  margin-right: 48px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(15,23,42,0.06);
@@ -434,7 +441,7 @@
 }
 
 .filter-card .card-header {
-  padding: 12px 16px;
+  padding: 12px 16px 12px 16px;
   border-bottom: 1.5px solid rgba(0,0,0,0.06);
   display: flex;
   justify-content: space-between;

@@ -413,27 +413,6 @@
   color: var(--text-primary);
 }
 
-  /* Ensure form controls render readable in dark mode */
-  html.dark-mode select,
-  html.dark-mode option,
-  html.dark-mode .settings-root select,
-  html.dark-mode .settings-root option {
-    color: #fff;
-    background-color: #2a2a2a;
-  }
-
-  /* Improve dropdown menu readability across browsers */
-  html.dark-mode .settings-root select {
-    border-color: #444;
-  }
-
-  /* Label and helper text inside dark mode cards */
-  html.dark-mode .settings-root label,
-  html.dark-mode .settings-root .toggle-label,
-  html.dark-mode .settings-root .muted.small {
-    color: #fff;
-  }
-
 .dark-mode .auto-settings select,
 .dark-mode .auto-settings input[type="time"] {
   background-color: var(--input-bg) !important;

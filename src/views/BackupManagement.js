@@ -21,24 +21,33 @@ export default function BackupManagement() {
     { id:3, date:'2025-11-03', type:'automatic', size:'2.3 GB' },
     { id:4, date:'2025-11-02', type:'manual', size:'2.2 GB' },
   ]);
-  const [deleting, setDeleting] = useState(null);
-  const [deletePassword, setDeletePassword] = useState('');
   const [notification, setNotification] = useState(null);
   const [backupProgress, setBackupProgress] = useState(0);
   const [isBackingUp, setIsBackingUp] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
+  const [restoring, setRestoring] = useState(null);
 
   function showNotification(message, type = 'success') {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
   }
 
-  function handleRestore() {
+  function handleRestore(backupDate, backupSize) {
+    setRestoring({ date: backupDate, size: backupSize });
+  }
+
+  function confirmRestore() {
     setIsRestoring(true);
+    setRestoring(null);
     setTimeout(() => {
       setIsRestoring(false);
       showNotification('Backup restored successfully!', 'success');
     }, 2000);
+  }
+
+  function cancelRestore() {
+    setRestoring(null);
+    showNotification('Restore operation cancelled.', 'info');
   }
 
   function handleStartBackup() {
@@ -182,30 +191,39 @@ export default function BackupManagement() {
               </div>
             </div>
 
-            <div className="auto-inline">
+            <div className="form-row stack" style={{padding: '20px', background: '#fff3e0', border: '1px solid #ffb74d', borderRadius: '8px', marginBottom: '16px'}}>
+              <p style={{margin: 0, color: '#e65100', fontWeight: 600, fontSize: '14px'}}>
+                ⚠️ Automatic backup settings are restricted to administrators only.
+              </p>
+              <p style={{margin: '8px 0 0', color: '#666', fontSize: '13px'}}>
+                Contact your system administrator to configure automatic backup schedules.
+              </p>
+            </div>
+
+            <div className="auto-inline" style={{opacity: 0.5, pointerEvents: 'none'}}>
               <div className="auto-inline-label muted">Automatic Backup</div>
               <label className="toggle-switch">
-                <input type="checkbox" checked={autoEnabled} onChange={e => setAutoEnabled(e.target.checked)} />
+                <input type="checkbox" checked={autoEnabled} disabled />
                 <span className="slider" aria-hidden></span>
               </label>
             </div>
 
-            <div className="form-row stack">
+            <div className="form-row stack" style={{opacity: 0.5, pointerEvents: 'none'}}>
               <label>Backup Frequency</label>
               <div className="control">
-                <FrequencyDropdown value={frequency} onChange={setFrequency} disabled={!autoEnabled} />
+                <FrequencyDropdown value={frequency} onChange={setFrequency} disabled={true} />
               </div>
             </div>
 
-            <div className="form-row stack">
+            <div className="form-row stack" style={{opacity: 0.5, pointerEvents: 'none'}}>
               <label>Backup Time</label>
               <div className="control">
-                <input type="time" value={backupTime} onChange={e => setBackupTime(e.target.value)} disabled={!autoEnabled} />
+                <input type="time" value={backupTime} disabled />
               </div>
             </div>
 
-            <div className="save-row">
-              <button className="btn primary" onClick={handleSaveSettings} disabled={!autoEnabled} aria-disabled={!autoEnabled}>Save Settings</button>
+            <div className="save-row" style={{opacity: 0.5, pointerEvents: 'none'}}>
+              <button className="btn primary" disabled>Save Settings</button>
             </div>
           </div>
           <div className="card history">
@@ -259,8 +277,7 @@ export default function BackupManagement() {
                                   <div className="muted small">{itemsForDay.map(it => it.size).join(', ')}</div>
                                   <div style={{marginTop:'auto'}}>
                                     <div className="hi-actions" style={{display:'flex', gap:8}}>
-                                      <button className="btn danger" onClick={() => { setDeleting({ year, month, day }); setDeletePassword(''); }}>Delete</button>
-                                      <button className="btn primary" onClick={handleRestore} disabled={isRestoring}>
+                                      <button className="btn primary" onClick={() => handleRestore(`${month} ${day}, ${year}`, itemsForDay[0].size)} disabled={isRestoring}>
                                         {isRestoring ? 'Restoring...' : 'Restore'}
                                       </button>
                                     </div>
@@ -286,45 +303,26 @@ export default function BackupManagement() {
           </div>
         </section>
       </main>
-      {deleting && (
+      {restoring && (
         <div className="modal modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-content">
-            <h3>Delete Backup</h3>
+            <h3>Restore Backup</h3>
             <div className="warning-row">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="16" r="14" fill="url(#warnGradient)"/>
+                <circle cx="16" cy="16" r="14" fill="url(#restoreGradientBackup)"/>
                 <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
                 <defs>
-                  <linearGradient id="warnGradient" x1="2" y1="2" x2="30" y2="30">
-                    <stop offset="0%" stopColor="#ff9800"/>
-                    <stop offset="100%" stopColor="#ff6b00"/>
+                  <linearGradient id="restoreGradientBackup" x1="2" y1="2" x2="30" y2="30">
+                    <stop offset="0%" stopColor="#ff7b00"/>
+                    <stop offset="100%" stopColor="#ff4b00"/>
                   </linearGradient>
                 </defs>
               </svg>
-              <p>Are you sure you want to permanently delete this backup? This action cannot be undone.</p>
-            </div>
-            <div className="form-row">
-              <label>Enter password to confirm:</label>
-              <input 
-                type="password" 
-                value={deletePassword} 
-                onChange={e => setDeletePassword(e.target.value)}
-                placeholder="Enter admin password"
-                autoFocus
-              />
+              <p>Are you sure you want to restore the backup from <strong>{restoring.date}</strong> ({restoring.size})? This will replace your current data.</p>
             </div>
             <div className="form-actions">
-              <button className="btn" onClick={() => { setDeleting(null); setDeletePassword(''); }}>Cancel</button>
-              <button className="btn primary" onClick={() => { 
-                if (deletePassword !== 'admin') {
-                  showNotification('Incorrect password. Please try again.', 'error');
-                  return;
-                }
-                setHistoryList(prev => prev.filter(i => i.id !== deleting)); 
-                showNotification('Backup deleted successfully!', 'success'); 
-                setDeleting(null);
-                setDeletePassword('');
-              }}>Delete</button>
+              <button className="btn" onClick={cancelRestore}>Cancel</button>
+              <button className="btn primary" onClick={confirmRestore}>Restore</button>
             </div>
           </div>
         </div>

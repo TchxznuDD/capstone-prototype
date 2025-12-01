@@ -9,27 +9,31 @@ import { ReactComponent as OfflineIcon } from "../assets/offline.svg";
 // header is provided by shared component
 
 export default function Dashboard() {
-  const stats = { total: 8, online: 6, offline: 2 };
+  const stats = { total: 12, online: 9, offline: 3 };
   const initialBuildings = [
     {
       id: 'rev',
       name: 'Revenue Building',
       subtitle: 'Main Office Complex',
-      online: 2,
+      online: 4,
       offline: 0,
       stations: [
         { id:'rev-01', name:'Revenue Workstation 1', host:'REV-01', ip:'192.168.1.10', uptime:'45h 23m', status:'online', lastSeen:'Active now'},
-        { id:'rev-02', name:'Revenue Workstation 2', host:'REV-02', ip:'192.168.1.11', uptime:'45h 20m', status:'online', lastSeen:'Active now'}
+        { id:'rev-02', name:'Revenue Workstation 2', host:'REV-02', ip:'192.168.1.11', uptime:'45h 20m', status:'online', lastSeen:'Active now'},
+        { id:'rev-03', name:'Revenue Workstation 3', host:'REV-03', ip:'192.168.1.12', uptime:'38h 15m', status:'online', lastSeen:'Active now'},
+        { id:'rev-04', name:'Revenue Workstation 4', host:'REV-04', ip:'192.168.1.13', uptime:'52h 30m', status:'online', lastSeen:'Active now'}
       ]
     },
     {
       id: 'vawc',
       name: 'VAWC Building',
       subtitle: 'Community Center',
-      online: 0,
-      offline: 1,
+      online: 1,
+      offline: 2,
       stations: [
-        { id:'vawc-01', name:'VAWC Station', host:'VAWC-01', ip:'192.168.1.20', uptime:'0h 0m', status:'offline', lastSeen:'2 hours ago'}
+        { id:'vawc-01', name:'VAWC Station', host:'VAWC-01', ip:'192.168.1.20', uptime:'0h 0m', status:'offline', lastSeen:'2 hours ago'},
+        { id:'vawc-02', name:'VAWC Workstation 2', host:'VAWC-02', ip:'192.168.1.21', uptime:'24h 45m', status:'online', lastSeen:'Active now'},
+        { id:'vawc-03', name:'VAWC Workstation 3', host:'VAWC-03', ip:'192.168.1.22', uptime:'0h 0m', status:'offline', lastSeen:'5 hours ago'}
       ]
     },
     {
@@ -67,14 +71,6 @@ export default function Dashboard() {
   const [selectEditOpen, setSelectEditOpen] = useState(false);
   const [selectBuilding, setSelectBuilding] = useState('');
   const [selectStationId, setSelectStationId] = useState('');
-  // options dropdown state
-  const [optionsOpen, setOptionsOpen] = useState(false);
-  const optionsRef = useRef(null);
-
-  // delete confirmation modal state
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState({ buildingId: '', stationId: '', stationName: '' });
-  const [deletePassword, setDeletePassword] = useState('');
 
   // modal state for add / edit
   const [modalOpen, setModalOpen] = useState(false);
@@ -267,35 +263,6 @@ export default function Dashboard() {
     setSelectEditOpen(false);
   }
 
-  // --- Delete PC handlers ---
-  function openDeleteModal(buildingId, stationId, stationName) {
-    setDeleteTarget({ buildingId, stationId, stationName });
-    setDeletePassword('');
-    setDeleteModalOpen(true);
-  }
-
-  function closeDeleteModal() {
-    setDeleteModalOpen(false);
-    setDeleteTarget({ buildingId: '', stationId: '', stationName: '' });
-    setDeletePassword('');
-  }
-
-  function handleConfirmDelete() {
-    if (deletePassword !== getAdminPassword()) {
-      showNotification('Incorrect password. Please try again.', 'error');
-      return;
-    }
-    setBuildings(prev => prev.map(b => {
-      if (b.id !== deleteTarget.buildingId) return b;
-      const updatedStations = b.stations.filter(s => s.id !== deleteTarget.stationId);
-      const onlineCount = updatedStations.filter(s => s.status === 'online').length;
-      const offlineCount = updatedStations.length - onlineCount;
-      return { ...b, stations: updatedStations, online: onlineCount, offline: offlineCount };
-    }));
-    showNotification('Computer deleted successfully!', 'success');
-    closeDeleteModal();
-  }
-
   return (
     <div className="dashboard-root">
       <Header active="computers" />
@@ -308,15 +275,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="external-refresh" style={{position:'relative'}}>
-            <div style={{position:'relative'}} ref={optionsRef}>
-              <button className="add-btn" onClick={() => setOptionsOpen(o => !o)}>Options ▾</button>
-              <div className={`options-menu ${optionsOpen ? 'open' : ''}`} role="menu" aria-hidden={!optionsOpen}>
-                <button className="options-item" onClick={() => { openAddModal(); setOptionsOpen(false); }}>Add PC</button>
-                <button className="options-item" onClick={() => { openSelectEditModal(); setOptionsOpen(false); }}>Edit PC Details</button>
-                <button className="options-item" onClick={() => { openAddBuildingModal(); setOptionsOpen(false); }}>Add Building</button>
-              </div>
-            </div>
+        <div className="external-refresh">
           <button className="refresh-btn">Refresh ↻</button>
         </div>
       </div>
@@ -384,11 +343,6 @@ export default function Dashboard() {
                     </div>
                     <div style={{display:'flex',alignItems:'center',gap:8}}>
                       <p className={`pill ${s.status}`}>{s.status.toUpperCase()}</p>
-                      <button className="delete-icon-btn" onClick={() => openDeleteModal(b.id, s.id, s.name)} title="Delete PC">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z" fill="currentColor"/>
-                        </svg>
-                      </button>
                     </div>
                   </div>
 
@@ -405,7 +359,6 @@ export default function Dashboard() {
       <AddEditModal open={modalOpen} mode={modalMode} buildings={buildings} buildingId={modalBuilding} setBuildingId={setModalBuilding} onClose={() => setModalOpen(false)} onSave={handleSaveModal} form={form} setForm={setForm} />
       <AddBuildingModal open={buildingModalOpen} onClose={closeBuildingModal} onSave={handleSaveBuilding} form={buildingForm} setForm={setBuildingForm} />
       <SelectEditModal open={selectEditOpen} onClose={closeSelectEditModal} buildings={buildings} buildingId={selectBuilding} setBuildingId={setSelectBuilding} stationId={selectStationId} setStationId={setSelectStationId} onConfirm={handleConfirmSelectEdit} />
-      <DeleteConfirmModal open={deleteModalOpen} onClose={closeDeleteModal} onConfirm={handleConfirmDelete} stationName={deleteTarget.stationName} password={deletePassword} setPassword={setDeletePassword} />
 
       {notification && (
         <div className={`toast-notification ${notification.type}`}>
@@ -499,44 +452,6 @@ function SelectEditModal({ open, onClose, buildings, buildingId, setBuildingId, 
         <div className="form-actions">
           <button className="btn" onClick={onClose}>Cancel</button>
           <button className="btn primary" onClick={onConfirm} disabled={!stationId}>Edit Selected</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DeleteConfirmModal({ open, onClose, onConfirm, stationName, password, setPassword }) {
-  if (!open) return null;
-  return (
-    <div className="modal modal-overlay" role="dialog" aria-modal="true">
-      <div className="modal-content">
-        <h3>Delete Computer</h3>
-        <div className="warning-row">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" fill="url(#warnGradient)"/>
-            <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
-            <defs>
-              <linearGradient id="warnGradient" x1="2" y1="2" x2="30" y2="30">
-                <stop offset="0%" stopColor="#ff9800"/>
-                <stop offset="100%" stopColor="#ff6b00"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <p>Are you sure you want to delete <strong>{stationName}</strong>? This action cannot be undone.</p>
-        </div>
-        <div className="form-row">
-          <label>Enter password to confirm:</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Enter admin password"
-            autoFocus
-          />
-        </div>
-        <div className="form-actions">
-          <button className="btn" onClick={onClose}>Cancel</button>
-          <button className="btn primary" onClick={onConfirm}>Delete</button>
         </div>
       </div>
     </div>

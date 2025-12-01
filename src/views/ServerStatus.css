@@ -1,12 +1,12 @@
 :root { --orange-1: #ff7b00; --orange-2: #ff4b00; }
 
-.server-root { min-height: 100vh; background: linear-gradient(135deg, var(--orange-1), var(--orange-2)); padding: 36px; font-family: Inter, Arial, sans-serif; }
-.server-hero { max-width: 1200px; margin: 0 auto 18px; }
-.hero-inner { color: #fff; padding: 20px 8px; }
-.hero-inner h1 { margin: 0; font-size: 28px; font-weight: 800; }
-.hero-sub { margin: 6px 0 0; opacity: 0.95; }
+.server-root { min-height: 100vh; background: #f5f7fa; padding: 0; font-family: Inter, Arial, sans-serif; }
+.server-hero { max-width: 100%; margin: 0 auto 18px; padding: 0 48px; }
+.hero-inner { color: #1a202c; padding: 24px 0 20px 0; }
+.hero-inner h1 { margin: 0; font-size: 36px; font-weight: 900; }
+.hero-sub { margin: 8px 0 0; color: #4a5568; }
 
-.server-container { max-width: 1200px; margin: 18px auto; }
+.server-container { max-width: 100%; margin: 18px 0; padding: 0 48px 48px 48px; }
 .server-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid rgba(0,0,0,0.04); padding-bottom:14px; }
 .server-name { margin:0; font-size:20px; }
 .server-sub { color: #666; margin-top:6px; display:flex; align-items:center; gap:10px; }

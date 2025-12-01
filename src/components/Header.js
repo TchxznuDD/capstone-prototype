@@ -213,7 +213,7 @@ function AdminDropdown() {
 
   return (
     <div className="dropdown" ref={ref}>
-      <button className="dropdown-toggle" onClick={() => setOpen(s => !s)} aria-haspopup="true" aria-expanded={open}>Admin ▾</button>
+      <button className="dropdown-toggle" onClick={() => setOpen(s => !s)} aria-haspopup="true" aria-expanded={open}>Staff ▾</button>
       <ul className={`dropdown-menu ${open ? 'open' : ''}`} role="menu" aria-hidden={!open}>
         <li role="menuitem"><Link to="/settings" onClick={(e)=>{ e.preventDefault(); setOpen(false); history.push('/settings'); setTimeout(()=>{ try{ window.scrollTo({top:0, behavior:'smooth'});}catch(_){ window.scrollTo(0,0);} }, 120); }}>Settings</Link></li>
         <li role="menuitem"><Link to="/user-manual" onClick={(e)=>{ e.preventDefault(); setOpen(false); history.push('/user-manual'); setTimeout(()=>{ try{ window.scrollTo({top:0, behavior:'smooth'});}catch(_){ window.scrollTo(0,0);} }, 120); }}>User Manual</Link></li>

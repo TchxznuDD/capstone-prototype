@@ -1,7 +1,7 @@
 /* Settings page styles - matches dashboard design */
 
 .settings-root {
-  padding: 20px;
+  padding: 0;
 }
 
 .settings-grid {
@@ -9,7 +9,8 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-top: 20px;
-  max-width: 1400px;
+  max-width: 100%;
+  padding: 0 48px 48px 48px;
 }
 
 .settings-card {

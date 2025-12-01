@@ -1,16 +1,31 @@
 /* Backup Management styles */
 
 /* match Computer.css dashboard padding and hero spacing */
-.backup-root { padding: 20px; }
-.backup-root .hero-row { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:32px; border-bottom:1.5px solid rgba(0,0,0,0.06); padding-bottom:18px }
+.backup-root { padding: 0; }
+.backup-root .hero-row { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:32px; border-bottom:1.5px solid rgba(0,0,0,0.06); padding-bottom:18px; padding-left: 48px; padding-right: 48px; padding-top: 24px; }
 
-/* Ensure BackupHistory main padding matches the dashboard margins from Computer.css
-   BackupHistory.js uses an inline padding; override it here to keep layouts consistent */
-.backup-history main {
-  padding: 0 20px 40px 20px !important;
+/* BackupManagement grid padding - matches .buildings-col from Computer.css */
+.backup-root:not(.backup-history) .backup-grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 20px; 
+  align-items: start; 
+  margin-top: 20px;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-bottom: 48px;
 }
 
-.backup-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+/* BackupHistory uses same padding */
+.backup-history .backup-grid {
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 20px; 
+  align-items: start;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-bottom: 48px;
+}
 
 .metrics-cards { display: flex; gap: 18px; margin-bottom: 12px; }
 .metric-card { background: #fff; padding: 18px; border-radius: 12px; box-shadow: 0 12px 30px rgba(15,23,42,0.06); flex:1; position: relative; }
@@ -87,7 +102,6 @@
 .manual-actions .progress-bar { display: none }
 .actions { display:flex; gap:8px }
 .btn.secondary { background:transparent; border:1px solid #eee }
-.manual-actions .btn.secondary { font-weight: 800 }
 .manual-actions .muted.small { color: #666; margin-top:0 }
 
 .auto-settings { display:flex; flex-direction:column; align-items:flex-start; }
@@ -213,34 +227,6 @@
 .auto-settings .dropdown-menu li { padding: 6px 12px }
 .auto-settings .dropdown-menu .link-like { display:block; width:100%; text-align:left; padding:6px 12px; border-radius:6px; background:transparent; border:none; color:inherit }
 .auto-settings .dropdown-menu .link-like:hover { background: rgba(0,0,0,0.04) }
-
-/* Dark mode adjustments for custom frequency dropdown */
-html.dark-mode .backup-root .dropdown-toggle {
-  color: #fff;
-  background-color: #2a2a2a;
-  border-color: #444;
-}
-
-html.dark-mode .backup-root .dropdown-menu {
-  background-color: #1f1f1f;
-  color: #fff;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-  border: 1px solid #333;
-}
-
-html.dark-mode .backup-root .dropdown-menu li {
-  padding: 6px 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-html.dark-mode .backup-root .dropdown-menu li:last-child { border-bottom: none }
-
-html.dark-mode .backup-root .dropdown-menu .link-like {
-  color: #fff;
-}
-html.dark-mode .backup-root .dropdown-menu .link-like:hover,
-html.dark-mode .backup-root .dropdown-menu .link-like:focus {
-  background-color: #2a2a2a;
-}
 
 /* compact inline controls placed at top-right of the automatic card */
 .auto-inline { position: absolute; top: 12px; right: 18px; display:flex; align-items:center; gap:10px }
