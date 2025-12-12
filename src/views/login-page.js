@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { setAuthenticated } from "../components/PrivateRoute";
 import "./login-page.css";
 import fatimaLogo from "../assets/fatima-logo.png";
 
@@ -42,6 +43,7 @@ export default function LoginPage() {
       return;
     }
     // simple client-side 'login' behavior: navigate to computer dashboard
+    setAuthenticated(true);
     history.push('/computer');
   }
 
