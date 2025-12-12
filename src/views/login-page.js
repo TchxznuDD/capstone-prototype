@@ -115,10 +115,25 @@ export default function LoginPage() {
 
   return (
     <div className="login-root">
-      <div className="login-card">
-        <img src={fatimaLogo} alt="Fatima Logo" className="login-logo" />
-        <h2>Welcome to Barangay Fatima</h2>
-        <form ref={formRef} onSubmit={handleSubmit}>
+      <div className="login-container">
+        {/* Header Section */}
+        <div className="login-header">
+          <div className="header-content">
+            <h1 className="header-title">BFRIS<span className="header-plus">+</span>S</h1>
+            <p className="header-subtitle">Barangay Fatima Residential Information System</p>
+            <p className="header-tagline">plus Secure</p>
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <div className="login-section">
+          <div className="login-card">
+            <img src={fatimaLogo} alt="Fatima Logo" className="login-logo" />
+            <div className="login-welcome">
+              <h3>Welcome to BFRIS+S.</h3>
+              <p>Please login.</p>
+            </div>
+            <form ref={formRef} onSubmit={handleSubmit}>
           <div className="input-row">
             <svg className="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
@@ -142,6 +157,8 @@ export default function LoginPage() {
 
           <button type="submit" className="login-btn">Login</button>
         </form>
+      </div>
+      </div>
       </div>
       {toast && (
         <div className="toast-notification error" role="status" aria-live="polite">

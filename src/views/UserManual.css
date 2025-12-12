@@ -2,6 +2,15 @@
 
 .usermanual-root {
   min-height: 100vh;
+  padding: 0;
+}
+
+.usermanual-root .hero-row {
+  padding: 24px 48px 18px 48px;
+}
+
+.usermanual-root main {
+  padding: 0 48px 48px 48px;
 }
 
 /* Download Card */
@@ -503,7 +512,22 @@
   }
 }
 
-/* Responsive */
+/* Footer */
+.manual-footer {
+  margin-top: 48px;
+  padding: 24px 48px;
+  border-top: 1px solid #e6e6e6;
+  background: #fafafa;
+  text-align: center;
+}
+
+.manual-footer p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .download-header {
     flex-direction: column;

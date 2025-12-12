@@ -356,7 +356,7 @@ export default function Dashboard() {
         ))}
       </main>
 
-      <AddEditModal open={modalOpen} mode={modalMode} buildings={buildings} buildingId={modalBuilding} setBuildingId={setModalBuilding} onClose={() => setModalOpen(false)} onSave={handleSaveModal} form={form} setForm={setForm} />
+      <AddComputerModal open={modalOpen} mode={modalMode} buildings={buildings} buildingId={modalBuilding} setBuildingId={setModalBuilding} onClose={() => setModalOpen(false)} onSave={handleSaveModal} form={form} setForm={setForm} />
       <AddBuildingModal open={buildingModalOpen} onClose={closeBuildingModal} onSave={handleSaveBuilding} form={buildingForm} setForm={setBuildingForm} />
       <SelectEditModal open={selectEditOpen} onClose={closeSelectEditModal} buildings={buildings} buildingId={selectBuilding} setBuildingId={setSelectBuilding} stationId={selectStationId} setStationId={setSelectStationId} onConfirm={handleConfirmSelectEdit} />
 
@@ -368,11 +368,15 @@ export default function Dashboard() {
           <div className="toast-message">{notification.message}</div>
         </div>
       )}
+
+      <footer className="app-footer">
+        <p>&copy;2025 Barangay Fatima. All rights reserved</p>
+      </footer>
     </div>
   );
 }
 
-function AddEditModal({ open, mode, buildings, buildingId, setBuildingId, onClose, onSave, form, setForm }) {
+function AddComputerModal({ open, mode, buildings, buildingId, setBuildingId, onClose, onSave, form, setForm }) {
   if (!open) return null;
   return (
     <div className="modal" role="dialog" aria-modal="true">

@@ -124,7 +124,7 @@ export default function UserManual() {
         'Viewing Computer Status by Building',
         'Adding New Computers to Buildings',
         'Editing Computer Details',
-        'Deleting Computers (Admin: password; Junior: Admin Passkey)',
+        'Deleting Computers (Admin: password required)',
         'Building Management (Revenue, VAWC, Legislative)',
         'Real-time Status Indicators (Online/Offline)',
         'IP Address Management',
@@ -335,8 +335,8 @@ export default function UserManual() {
                 </svg>
               </div>
               <h4>Admin Password (Default)</h4>
-              <p className="ref-value">admin</p>
-              <p className="ref-desc">Used for delete confirmations in Admin</p>
+              <p className="ref-value">junior</p>
+              <p className="ref-desc">Password of junior staff</p>
             </div>
             <div className="ref-item">
               <div className="ref-icon blue">
@@ -358,16 +358,7 @@ export default function UserManual() {
               <p className="ref-value">30 seconds</p>
               <p className="ref-desc">Default refresh interval</p>
             </div>
-            <div className="ref-item">
-              <div className="ref-icon red">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-                </svg>
-              </div>
-              <h4>Backup Retention</h4>
-              <p className="ref-value">30 days</p>
-              <p className="ref-desc">Automatic cleanup period</p>
-            </div>
+
           </div>
         </section>
 
