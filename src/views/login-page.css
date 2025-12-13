@@ -56,11 +56,11 @@ html, body, .login-root { height: 100%; margin: 0; padding: 0; }
 }
 
 .header-title {
-  font-size: clamp(36px, 5vw, 52px);
+  font-size: clamp(48px, 7vw, 72px);
   font-weight: 800;
   margin: 0 0 12px 0;
   color: #ffffff;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   text-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 

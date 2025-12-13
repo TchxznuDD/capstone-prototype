@@ -32,14 +32,11 @@ export default function LoginPage() {
     if (missing.length) {
       const msg = `Please provide: ${missing.join(' and ')}`;
       showToast(msg);
-      // trigger shake animation on the card
-      if (formRef.current) {
-        formRef.current.classList.remove('shake');
-        // force reflow
-        void formRef.current.offsetWidth;
-        formRef.current.classList.add('shake');
-        window.setTimeout(() => formRef.current && formRef.current.classList.remove('shake'), 600);
-      }
+      return;
+    }
+    // Mock credentials check (staff/junior)
+    if (username.trim() !== 'staff' || password !== 'junior') {
+      showToast('Invalid username or password');
       return;
     }
     // simple client-side 'login' behavior: navigate to computer dashboard
@@ -59,12 +56,6 @@ export default function LoginPage() {
       setErrors(nextErrors);
       const msg = `Please provide: ${missing.join(', ')}`;
       showToast(msg);
-      if (formRef.current) {
-        formRef.current.classList.remove('shake');
-        void formRef.current.offsetWidth;
-        formRef.current.classList.add('shake');
-        window.setTimeout(() => formRef.current && formRef.current.classList.remove('shake'), 600);
-      }
     }
   }
 
