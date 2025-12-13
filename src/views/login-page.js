@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { setAuthenticated } from "../components/PrivateRoute";
 import "./login-page.css";
-import fatimaLogo from "../assets/fatima-logo.png";
+import { fatimaLogoBase64 as fatimaLogo } from "../assets/fatima-logo-base64";
 
 export default function LoginPage() {
   const history = useHistory();
@@ -172,52 +172,69 @@ export default function LoginPage() {
 
   return (
     <div className="login-root">
-      <div className="login-container">
-        {/* Header Section */}
-        <div className="login-header">
-          <div className="header-content">
-            <h1 className="header-title">BFRIS<span className="header-plus">+</span>S</h1>
-            <p className="header-subtitle">Barangay Fatima Residential Information System</p>
-            <p className="header-tagline">plus Secure</p>
+      {/* Orange Header Bar - copied from Header.js, logo + text only */}
+      <header className="app-header">
+        <div className="brand">
+          <img src={fatimaLogo} alt="logo" />
+          <div>
+            <h1>Barangay Fatima</h1>
+            <p>Network Monitoring Dashboard</p>
           </div>
         </div>
+      </header>
 
-        {/* Form Section */}
-        <div className="login-section">
+      {/* White Content Area */}
+      <div className="login-content-area">
+        <div className="login-left">
+          <h1 className="header-title">
+            BFRIS
+            <span className="header-plus">+</span>
+            <span className="header-s">S</span>
+            <span className="header-secure-icon" title="Secure">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{verticalAlign: 'middle'}} xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 11V7a5 5 0 0 0-10 0v4" stroke="#ff4b00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect x="5" y="11" width="14" height="8" rx="2" fill="none" stroke="#ff4b00" strokeWidth="2"/>
+                <circle cx="12" cy="15" r="1" fill="#ff4b00"/>
+              </svg>
+            </span>
+          </h1>
+          <p className="header-subtitle">Barangay Fatima Residential Information System</p>
+          <p className="header-tagline">plus <span style={{color:'#ff4b00', fontWeight:600}}>Secure</span></p>
+        </div>
+
+        <div className="login-right">
           <div className="login-card">
-            <img src={fatimaLogo} alt="Fatima Logo" className="login-logo" />
             <div className="login-welcome">
-              <h3>Welcome to BFRIS+S.</h3>
-              <p>Please login.</p>
+              <p>Please login to continue.</p>
             </div>
             <form ref={formRef} onSubmit={handleSubmit}>
-          <div className="input-row">
-            <svg className="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
-            </svg>
+              <div className="input-row">
+                <svg className="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
+                </svg>
                 <input ref={usernameRef} type="text" name="username" placeholder="Username" className={`login-input ${errors.username ? 'invalid' : ''}`} value={username} onChange={e => { setUsername(e.target.value); if (errors.username) setErrors(es => ({...es, username: ''})); }} aria-invalid={errors.username ? 'true' : 'false'} />
-          </div>
+              </div>
 
-          <div className="input-row">
-            <svg className="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6V9a6 6 0 0 0-12 0v2H4v10h16V11h-2zm-8-2a4 4 0 0 1 8 0v2H10V9z" />
-            </svg>
+              <div className="input-row">
+                <svg className="input-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6V9a6 6 0 0 0-12 0v2H4v10h16V11h-2zm-8-2a4 4 0 0 1 8 0v2H10V9z" />
+                </svg>
                 <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" className={`login-input ${errors.password ? 'invalid' : ''}`} value={password} onChange={e => { setPassword(e.target.value); if (errors.password) setErrors(es => ({...es, password: ''})); }} aria-invalid={errors.password ? 'true' : 'false'} />
-            <button type="button" className="eye-btn" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(s => !s)}>
-              {showPassword ? (
-                <svg className="eye-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5c-7 0-11 6.5-11 7s4 7 11 7 11-6.5 11-7-4-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
-              ) : (
-                <svg className="eye-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4.5C7 4.5 3 8 1 12c2 4 6 7.5 11 7.5s9-3.5 11-7.5c-2-4-6-7.5-11-7.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
-              )}
-            </button>
-          </div>
+                <button type="button" className="eye-btn" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(s => !s)}>
+                  {showPassword ? (
+                    <svg className="eye-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5c-7 0-11 6.5-11 7s4 7 11 7 11-6.5 11-7-4-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+                  ) : (
+                    <svg className="eye-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4.5C7 4.5 3 8 1 12c2 4 6 7.5 11 7.5s9-3.5 11-7.5c-2-4-6-7.5-11-7.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+                  )}
+                </button>
+              </div>
 
-          <button type="submit" className="login-btn" disabled={lockoutEndTime && Date.now() < lockoutEndTime}>
-            {lockoutEndTime && lockoutRemaining > 0 ? `Locked (${lockoutRemaining}s)` : 'Login'}
-          </button>
-        </form>
-      </div>
-      </div>
+              <button type="submit" className="login-btn" disabled={lockoutEndTime && Date.now() < lockoutEndTime}>
+                {lockoutEndTime && lockoutRemaining > 0 ? `Locked (${lockoutRemaining}s)` : 'Login'}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
       {toast && (
         <div className="toast-notification error" role="status" aria-live="polite">
