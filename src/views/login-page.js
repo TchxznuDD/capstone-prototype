@@ -17,13 +17,61 @@ export default function LoginPage() {
   const formRef = useRef(null);
   const usernameRef = useRef(null);
 
+  // Rate limiting state
+  const [failedAttempts, setFailedAttempts] = useState(() => {
+    const stored = localStorage.getItem('bfris_failed_attempts');
+    return stored ? parseInt(stored, 10) : 0;
+  });
+  const [lockoutEndTime, setLockoutEndTime] = useState(() => {
+    const stored = localStorage.getItem('bfris_lockout_end');
+    if (stored) {
+      const endTime = parseInt(stored, 10);
+      if (endTime > Date.now()) return endTime;
+      localStorage.removeItem('bfris_lockout_end');
+      localStorage.removeItem('bfris_failed_attempts');
+    }
+    return null;
+  });
+  const [lockoutRemaining, setLockoutRemaining] = useState(() => {
+    const stored = localStorage.getItem('bfris_lockout_end');
+    if (stored) {
+      const remaining = Math.ceil((parseInt(stored, 10) - Date.now()) / 1000);
+      return remaining > 0 ? remaining : 0;
+    }
+    return 0;
+  });
+
   // Remove dark mode on login page
   useEffect(() => {
     document.documentElement.classList.remove('dark-mode');
   }, []);
 
+  // Lockout countdown timer
+  useEffect(() => {
+    if (!lockoutEndTime) return;
+    const interval = setInterval(() => {
+      const remaining = Math.ceil((lockoutEndTime - Date.now()) / 1000);
+      if (remaining <= 0) {
+        setLockoutEndTime(null);
+        setLockoutRemaining(0);
+        setFailedAttempts(0);
+        localStorage.removeItem('bfris_lockout_end');
+        localStorage.removeItem('bfris_failed_attempts');
+        clearInterval(interval);
+      } else {
+        setLockoutRemaining(remaining);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutEndTime]);
+
   function handleSubmit(e) {
     e.preventDefault();
+    // Check if locked out
+    if (lockoutEndTime && Date.now() < lockoutEndTime) {
+      showToast(`Too many failed attempts. Please wait ${lockoutRemaining} seconds.`);
+      return;
+    }
     const nextErrors = { username: '', password: '' };
     const missing = [];
     if (!username || !username.trim()) { nextErrors.username = 'Username is required'; missing.push('Username'); }
@@ -36,9 +84,25 @@ export default function LoginPage() {
     }
     // Mock credentials check (staff/junior)
     if (username.trim() !== 'staff' || password !== 'junior') {
-      showToast('Invalid username or password');
+      const newAttempts = failedAttempts + 1;
+      setFailedAttempts(newAttempts);
+      localStorage.setItem('bfris_failed_attempts', newAttempts.toString());
+      if (newAttempts >= 3) {
+        const lockoutEnd = Date.now() + 60000; // 1 minute lockout
+        setLockoutEndTime(lockoutEnd);
+        setLockoutRemaining(60);
+        localStorage.setItem('bfris_lockout_end', lockoutEnd.toString());
+        showToast('Too many failed attempts. Please try again in 1 minute.');
+      } else {
+        showToast('Invalid username or password');
+      }
       return;
     }
+    // Reset failed attempts on successful login
+    setFailedAttempts(0);
+    setLockoutEndTime(null);
+    localStorage.removeItem('bfris_lockout_end');
+    localStorage.removeItem('bfris_failed_attempts');
     // simple client-side 'login' behavior: navigate to computer dashboard
     setAuthenticated(true);
     history.push('/computer');
@@ -148,7 +212,9 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <button type="submit" className="login-btn">Login</button>
+          <button type="submit" className="login-btn" disabled={lockoutEndTime && Date.now() < lockoutEndTime}>
+            {lockoutEndTime && lockoutRemaining > 0 ? `Locked (${lockoutRemaining}s)` : 'Login'}
+          </button>
         </form>
       </div>
       </div>
