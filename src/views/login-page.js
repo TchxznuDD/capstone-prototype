@@ -5,6 +5,7 @@ import "./login-page.css";
 import { fatimaLogoBase64 as fatimaLogo } from "../assets/fatima-logo-base64";
 
 export default function LoginPage() {
+    // Removed real-time clock and date; replaced with static version string
   const history = useHistory();
   // add a single custom reveal toggle inside the password input
   const [showPassword, setShowPassword] = useState(false);
@@ -173,14 +174,17 @@ export default function LoginPage() {
   return (
     <div className="login-root">
       {/* Orange Header Bar - copied from Header.js, logo + text only */}
-      <header className="app-header">
-        <div className="brand">
+      <header className="app-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="brand" style={{ display: 'flex', alignItems: 'center' }}>
           <img src={fatimaLogo} alt="logo" />
           <div>
             <h1>Barangay Fatima</h1>
             <p>Network Monitoring Dashboard</p>
           </div>
         </div>
+        <span style={{ color: 'white', fontSize: '0.95em', fontWeight: 400, letterSpacing: '0.05em', minWidth: 90, textAlign: 'right', display: 'flex', alignItems: 'center' }}>
+          BFRIS+S v1.2
+        </span>
       </header>
 
       {/* White Content Area */}
