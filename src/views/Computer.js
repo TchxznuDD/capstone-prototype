@@ -264,7 +264,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dashboard-root">
+    <div className="dashboard-root computers-view">
       <Header active="computers" />
 
       <div className="hero-row">

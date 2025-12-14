@@ -906,3 +906,45 @@ body {
     opacity: 1;
   }
 }
+
+
+/* Dark-mode (Computer view only): keep small icon backgrounds and status pills matching
+   their light-mode pale colors for uniformity (e.g. green svg bg -> pale green) */
+.dark-mode .dashboard-root.computers-view .stat-card.stat-online .icon-bg { background: rgba(10,143,54,0.12) !important; }
+.dark-mode .dashboard-root.computers-view .stat-card.stat-offline .icon-bg { background: rgba(214,40,40,0.12) !important; }
+.dark-mode .dashboard-root.computers-view .stat-card.stat-total .icon-bg { background: rgba(255,123,0,0.12) !important; }
+
+.dark-mode .dashboard-root.computers-view .location-icon { background: #fff6f0 !important; }
+.dark-mode .dashboard-root.computers-view .station-thumb { background: rgba(40,167,69,0.16) !important; }
+
+.dark-mode .dashboard-root.computers-view .status-pill.online { background: rgba(10,143,54,0.12) !important; color: #0b8f36 !important; }
+.dark-mode .dashboard-root.computers-view .status-pill.offline { background: rgba(214,40,40,0.12) !important; color: #d62828 !important; }
+
+/* Stronger overrides (Computer view only) to ensure the small icon boxes keep pale colors in dark mode.
+   These use higher-specificity selectors and also force SVG fills to match. */
+.dark-mode .dashboard-root.computers-view .stat-card.stat-online .stat-icon .icon-bg,
+.dark-mode .dashboard-root.computers-view .stat-card.stat-online .icon-bg,
+.dark-mode .dashboard-root.computers-view .stat-icon .icon-bg.stat-online-ensure {
+  background: rgba(10,143,54,0.12) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+.dark-mode .dashboard-root.computers-view .stat-card.stat-offline .stat-icon .icon-bg,
+.dark-mode .dashboard-root.computers-view .stat-card.stat-offline .icon-bg,
+.dark-mode .dashboard-root.computers-view .stat-icon .icon-bg.stat-offline-ensure {
+  background: rgba(214,40,40,0.12) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* Force icon SVGs to use the intended accent colors inside the pale boxes (Computer view only) */
+.dark-mode .dashboard-root.computers-view .stat-card.stat-online .stat-icon .stat-svg,
+.dark-mode .dashboard-root.computers-view .stat-card.stat-online .stat-icon svg {
+  color: #0b8f36 !important;
+  fill: #0b8f36 !important;
+}
+.dark-mode .dashboard-root.computers-view .stat-card.stat-offline .stat-icon .stat-svg,
+.dark-mode .dashboard-root.computers-view .stat-card.stat-offline .stat-icon svg {
+  color: #d62828 !important;
+  fill: #d62828 !important;
+}

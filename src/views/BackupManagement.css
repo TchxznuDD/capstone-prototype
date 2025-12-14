@@ -304,6 +304,32 @@
 .auto-settings .dropdown-menu .link-like:hover { background: rgba(0,0,0,0.04) }
 
 /* compact inline controls placed at top-right of the automatic card */
+
+/* Dark-mode: keep metric-card small icon backgrounds pale and readable
+   scoped to the BackupManagement view so other pages aren't affected */
+.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg { background: rgba(240,240,240,0.06) !important; }
+.dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon .icon-bg.storage { background: rgba(255,75,0,0.12) !important; }
+.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green { background: rgba(40,167,69,0.12) !important; }
+
+/* Make the middle (total) card slightly lighter so dark/black SVGs remain visible */
+.dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon .icon-bg { background: rgba(250,250,250,0.12) !important; }
+
+/* Force SVG fills / colors to match accents where appropriate */
+.dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon .stat-svg,
+.dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon svg {
+  color: #ff6b00 !important;
+  fill: #ff6b00 !important;
+}
+.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green .stat-svg,
+.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green svg {
+  color: #0b8f36 !important;
+  fill: #0b8f36 !important;
+}
+.dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon .stat-svg,
+.dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon svg {
+  color: #111 !important;
+  fill: #111 !important;
+}
 .auto-inline { position: absolute; top: 12px; right: 18px; display:flex; align-items:center; gap:10px }
 .auto-inline .auto-inline-label { font-size:13px; color:#666; margin-right:6px }
 .auto-inline .toggle-switch { display:inline-block }
