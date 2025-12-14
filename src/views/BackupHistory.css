@@ -1,3 +1,7 @@
+/* Remove left space in backup history hero row */
+.backup-history .hero-row {
+  padding-left: 0 !important;
+}
 /* BackupHistory specific styles to match Computer dashboard spacing and card layout */
 
 /* Page root spacing removed - now handled in BackupManagement.css */

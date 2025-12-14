@@ -1,8 +1,83 @@
+.backup-root .hero-row .hero-text p {
+  margin-bottom: 12px;
+}
+
+/* Allow the hero paragraph more horizontal space for readability */
+.backup-root .hero-row .hero-text p {
+  display: block;
+  max-width: none;
+  width: 100%;
+  line-height: 1.45;
+}
+
+/* Constrain the hero text block so heading and paragraph sit together at desired width */
+.backup-root .hero-row .hero-text {
+  max-width: 920px; /* adjust as needed to match design */
+}
+
+/* Page-only header container: allow wider header on Backup page without affecting other views */
+.backup-root .hero-row .header-text,
+.backup-root .hero-row .page-hero {
+  max-width: 920px;
+  width: 100%;
+}
+
+/* Removed override that expanded .header-text to full width — keep parent constraints */
+/* Align hero-text to left for heading and paragraph */
+/* Align hero-text to left for heading and paragraph */
+.backup-root .hero-row .hero-text {
+  align-items: flex-start;
+  text-align: left;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Remove default margin/padding from heading and paragraph for perfect alignment */
+.backup-root .hero-row .page-hero {
+  margin-top: 12px;
+  padding: 6px 6px 0 6px;
+  display: block;
+}
+.backup-root .hero-row .hero-text h2 {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+.backup-root .hero-row .hero-text p {
+  margin: 8px 0 0 0;
+  padding: 0;
+  text-align: left;
+  color: #fff;
+  font-size: 14px;
+}
+/* Remove glow from Backup Management heading */
+.backup-root .hero-row .page-hero,
+.backup-root .hero-row .header-text,
+.backup-root .hero-row .hero-text,
+.backup-root .hero-row h2 {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
 /* Backup Management styles */
 
 /* match Computer.css dashboard padding and hero spacing */
 .backup-root { padding: 0; }
-.backup-root .hero-row { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:32px; border-bottom:1.5px solid rgba(0,0,0,0.06); padding-bottom:18px; padding-left: 48px; padding-right: 48px; padding-top: 24px; }
+.backup-root .hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 32px;
+  border-bottom: 1.5px solid rgba(0,0,0,0.06);
+  padding-bottom: 18px;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-top: 24px;
+}
 
 /* BackupManagement grid padding - matches .buildings-col from Computer.css */
 .backup-root:not(.backup-history) .backup-grid { 

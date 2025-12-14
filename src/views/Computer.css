@@ -317,7 +317,6 @@ body {
   font-size: 28px;
   font-weight: 800;
   color: #fff;
-}
 
 .header-text p {
   margin: 6px 0 0 0;
@@ -326,8 +325,8 @@ body {
 }
 
 .refresh-btn {
-  background: linear-gradient(90deg, #ff7b00 0%, #ff4b00 100%) !important;
-  border: 2px solid #ff7b00 !important;
+  background: linear-gradient(90deg, #ff9800 0%, #ff6b00 100%) !important;
+  border: 2px solid #ff9800 !important;
   color: #fff !important;
   padding: 8px 14px;
   border-radius: 18px;
@@ -335,9 +334,13 @@ body {
   font-weight: 800;
   display: inline-block;
   visibility: visible;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.refresh-btn:hover { background: linear-gradient(90deg, #ff6b00 0%, #ff3b00 100%) !important; border-color: #ff6b00 !important; }
+.refresh-btn:hover {
+  background: linear-gradient(90deg, #ffb347 0%, #ff9800 100%) !important;
+  border-color: #ff9800 !important;
+}
 
 /* external refresh placed outside the header */
 .external-refresh {
@@ -348,12 +351,30 @@ body {
   align-items: center;
   flex-shrink: 0;
 }
-.external-refresh .refresh-btn {
   padding: 10px 18px;
   border-radius: 18px;
   font-size: 15px;
   box-shadow: 0 4px 12px rgba(255, 123, 0, 0.25);
   flex-shrink: 0;
+}
+
+.external-refresh .refresh-btn {
+  background: linear-gradient(90deg, #ff9800 0%, #ff6b00 100%) !important;
+  border: 2px solid #ff9800 !important;
+  color: #fff !important;
+  padding: 10px 18px;
+  border-radius: 18px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.18);
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.external-refresh .refresh-btn:hover {
+  background: linear-gradient(90deg, #ffb347 0%, #ff9800 100%) !important;
+  border-color: #ff9800 !important;
 }
 
 .add-btn {
