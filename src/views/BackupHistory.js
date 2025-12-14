@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import './BackupManagement.css';
@@ -59,6 +59,14 @@ export default function BackupHistory() {
 
   const location = useLocation();
 
+  const [selectedDate, setSelectedDate] = useState(''); // YYYY-MM-DD
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarView, setCalendarView] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const pickerRef = useRef(null);
+
   // If navigated here with state or ?scroll=top, scroll the main container into view
   useEffect(() => {
     try {
@@ -70,7 +78,7 @@ export default function BackupHistory() {
             const mainEl = document.querySelector('main.backup-grid') || document.querySelector('main');
             const headerEl = document.querySelector('.app-header') || document.querySelector('.header');
             const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
-            const extraOffset = 24; // nudge further up so content sits higher under header
+            const extraOffset = 150; // increased offset so content scrolls further up under header
             if (mainEl) {
               const top = mainEl.getBoundingClientRect().top + window.scrollY - headerH - extraOffset;
               window.scrollTo({ top: Math.max(0, Math.floor(top)), behavior: 'smooth' });
@@ -85,7 +93,29 @@ export default function BackupHistory() {
     }
   }, [location]);
 
-  const grouped = groupByYearMonth(items);
+  // Close calendar when clicking outside or pressing Escape
+  useEffect(() => {
+    function onDocClick(e) {
+      if (!showCalendar) return;
+      if (!pickerRef.current) return;
+      if (!pickerRef.current.contains(e.target)) {
+        setShowCalendar(false);
+      }
+    }
+    function onKey(e) {
+      if (e.key === 'Escape' && showCalendar) setShowCalendar(false);
+    }
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [showCalendar]);
+
+  // Filter items by selected date if any, then group
+  const activeItems = selectedDate ? items.filter(it => (new Date(it.date).toISOString().slice(0,10)) === selectedDate) : items;
+  const grouped = groupByYearMonth(activeItems);
 
   function removeDay(year, month, day) {
     // remove all items that match year/month/day
@@ -107,8 +137,50 @@ export default function BackupHistory() {
           </div>
         </div>
 
-        <div className="external-refresh" style={{alignSelf: 'center'}}>
-          <Link to="/backup" className="refresh-btn">← Back</Link>
+        <div style={{display:'flex', alignItems:'center', gap:12}}>
+          <div className="date-picker" style={{display:'flex', alignItems:'center', gap:8, position:'relative'}} ref={pickerRef}>
+            {/* date button toggles calendar; clicking again closes it */}
+            <button className="btn" onClick={(e) => { e.preventDefault(); setShowCalendar(s => !s); if (!showCalendar && selectedDate) { const parts = selectedDate.split('-').map(Number); setCalendarView(new Date(parts[0], parts[1]-1, 1)); } }}>
+              {selectedDate ? selectedDate : 'Choose date'}
+            </button>
+            {selectedDate && <button className="btn" onClick={() => { setSelectedDate(''); setShowCalendar(false); }}>Clear</button>}
+
+            {showCalendar && (
+              <div className="calendar-popup" role="dialog" aria-modal="false">
+                <div className="calendar-header">
+                  <button className="cal-nav" onClick={() => setCalendarView(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}>&lt;</button>
+                  <div className="cal-month">{calendarView.toLocaleString(undefined, { month: 'long', year: 'numeric' })}</div>
+                  <button className="cal-nav" onClick={() => setCalendarView(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}>&gt;</button>
+                </div>
+                <div className="calendar-grid">
+                  {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => <div key={d} className="cal-weekday">{d}</div>)}
+                  {(() => {
+                    const blanks = new Array(new Date(calendarView.getFullYear(), calendarView.getMonth(), 1).getDay()).fill(null);
+                    const days = [];
+                    const dim = new Date(calendarView.getFullYear(), calendarView.getMonth() + 1, 0).getDate();
+                    for (let i = 1; i <= dim; i++) days.push(i);
+                    return blanks.concat(days).map((v, idx) => {
+                      if (v === null) return <div key={'b'+idx} className="cal-day empty" />;
+                      const year = calendarView.getFullYear();
+                      const month = calendarView.getMonth() + 1;
+                      const dd = v;
+                      const iso = `${year}-${String(month).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+                      const isSelected = iso === selectedDate;
+                      return (
+                        <button key={iso} className={`cal-day${isSelected ? ' selected' : ''}`} onClick={() => { setSelectedDate(iso); setShowCalendar(false); }} aria-pressed={isSelected}>
+                          {v}
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="external-refresh" style={{alignSelf: 'center'}}>
+            <Link to="/backup" className="refresh-btn">← Back</Link>
+          </div>
         </div>
       </div>
 

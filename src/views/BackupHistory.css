@@ -1,6 +1,6 @@
-/* Remove left space in backup history hero row */
+/* Ensure hero row uses the same left padding as other pages */
 .backup-history .hero-row {
-  padding-left: 0 !important;
+  padding-left: 48px !important;
 }
 /* BackupHistory specific styles to match Computer dashboard spacing and card layout */
 
@@ -16,7 +16,7 @@
 
 .backup-history .hero-text p {
   margin: 8px 0 0 0;
-  color: #4a5568;
+  color: #fff;
   font-size: 14px;
 }
 
@@ -38,3 +38,58 @@
 
 /* Buttons in the history card should sit at the bottom-right */
 .backup-history .hi-actions { display:flex; gap:8px }
+
+/* Date-picker + calendar popup styles */
+.backup-history .date-picker { position: relative; }
+.backup-history .date-picker .btn { padding:6px 10px }
+.backup-history .calendar-popup {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 260px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 8px 24px rgba(11,22,39,0.06);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 40;
+}
+.calendar-header { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px }
+.cal-nav { background:transparent; border:none; padding:6px 8px; cursor:pointer }
+.cal-month { font-weight:700 }
+.calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px }
+.cal-weekday { font-size:12px; color:#666; text-align:center }
+.cal-day { border:none; background:transparent; padding:8px 6px; border-radius:6px; cursor:pointer; text-align:center }
+.cal-day.empty { background:transparent; cursor:default }
+.cal-day:hover { background:#f3f4f6 }
+.cal-day.selected { background:#2563eb; color:#fff }
+
+.dark-mode .calendar-popup { background: var(--bg-card); border: 1px solid var(--input-border); box-shadow: 0 8px 24px rgba(2,6,23,0.6); color: var(--text-primary) }
+.dark-mode .cal-day:hover { background: rgba(255,255,255,0.04) }
+.dark-mode .cal-day.selected { background: var(--accent-primary); color: var(--bg-default) }
+
+/* Remove default focus outlines and white highlight boxes to match dark UI */
+.backup-history .date-picker .btn:focus,
+.backup-history .cal-day:focus,
+.backup-history .cal-nav:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Ensure the calendar popup has a dark panel (not fully transparent) so controls remain readable */
+.dark-mode .backup-history .calendar-popup {
+  background: var(--bg-card);
+  border: 1px solid var(--input-border);
+  box-shadow: 0 8px 24px rgba(2,6,23,0.6);
+}
+
+/* improve contrast of month/year heading in dark mode */
+.dark-mode .backup-history .cal-month { color: var(--text-primary); }
+
+/* ensure selected day stands out without white outlines */
+.backup-history .cal-day.selected { border: none; }
+.dark-mode .backup-history .cal-day.selected { border: none; }
+
+/* Date-button colors: ensure visible in both themes */
+.backup-history .date-picker .btn { background: rgba(255,255,255,0.02); color: #111; border: 1px solid rgba(0,0,0,0.06) }
+.dark-mode .backup-history .date-picker .btn { background: rgba(255,255,255,0.04); color: var(--text-primary); border: 1px solid var(--input-border) }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import './FirewallMonitor.css';
 import { getDarkMode, applyDarkMode } from '../utils/theme';
@@ -16,18 +16,21 @@ import {
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+// Register Chart.js components (guarded for HMR / multiple imports)
+if (!ChartJS.__registered) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+  );
+  ChartJS.__registered = true;
+}
 
 // Mock data for MikroTik RouterOS firewall rules (stateful firewall)
 const mockFirewallRules = [
@@ -146,11 +149,36 @@ export default function FirewallMonitor() {
 
   // State for chart refresh counter
   const [chartKey, setChartKey] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const lastRefreshRef = useRef(0);
+
+  // Refs to chart instances so we can destroy them before remounting
+  const bandwidthRef = useRef(null);
+  const protocolRef = useRef(null);
+  const blockedRef = useRef(null);
 
   // Re-apply dark mode and configure charts for dark mode
   useEffect(() => {
     applyDarkMode(getDarkMode());
     updateChartColors();
+    return () => {
+      // cleanup chart instances on unmount — try multiple ref shapes
+      try {
+        if (bandwidthRef.current?.destroy) bandwidthRef.current.destroy();
+        else if (bandwidthRef.current?.chartInstance?.destroy) bandwidthRef.current.chartInstance.destroy();
+        else if (bandwidthRef.current?.chart?.destroy) bandwidthRef.current.chart.destroy();
+      } catch (e) {}
+      try {
+        if (protocolRef.current?.destroy) protocolRef.current.destroy();
+        else if (protocolRef.current?.chartInstance?.destroy) protocolRef.current.chartInstance.destroy();
+        else if (protocolRef.current?.chart?.destroy) protocolRef.current.chart.destroy();
+      } catch (e) {}
+      try {
+        if (blockedRef.current?.destroy) blockedRef.current.destroy();
+        else if (blockedRef.current?.chartInstance?.destroy) blockedRef.current.chartInstance.destroy();
+        else if (blockedRef.current?.chart?.destroy) blockedRef.current.chart.destroy();
+      } catch (e) {}
+    };
   }, []);
 
   // Function to update chart colors based on dark mode
@@ -161,11 +189,23 @@ export default function FirewallMonitor() {
       ChartJS.defaults.borderColor = '#3d3d3d';
       ChartJS.defaults.plugins.legend.labels.color = '#ffffff';
       ChartJS.defaults.scale.ticks.color = '#ffffff';
+      ChartJS.defaults.animation = false;
+      ChartJS.defaults.animations = false;
+      ChartJS.defaults.transitions = {};
+      ChartJS.defaults.responsive = false;
+      ChartJS.defaults.resizeDelay = 200;
+      if (ChartJS.defaults.plugins) ChartJS.defaults.plugins.animation = false;
     } else {
       ChartJS.defaults.color = '#666';
       ChartJS.defaults.borderColor = '#e0e0e0';
       ChartJS.defaults.plugins.legend.labels.color = '#666';
       ChartJS.defaults.scale.ticks.color = '#666';
+      ChartJS.defaults.animation = false;
+      ChartJS.defaults.animations = false;
+      ChartJS.defaults.transitions = {};
+      ChartJS.defaults.responsive = false;
+      ChartJS.defaults.resizeDelay = 200;
+      if (ChartJS.defaults.plugins) ChartJS.defaults.plugins.animation = false;
     }
     setChartKey(prev => prev + 1); // Force chart re-render
   };
@@ -185,9 +225,37 @@ export default function FirewallMonitor() {
    * Simulates reloading mock data
    */
   function handleRefresh() {
+    // Debounce / prevent spamming refresh which triggers resize thrash
+    const now = Date.now();
+    if (isRefreshing || now - lastRefreshRef.current < 700) {
+      showNotification('Please wait before refreshing again', 'info');
+      return;
+    }
+    lastRefreshRef.current = now;
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 700);
+
     // In a real app, this would fetch fresh data from API
     setRules([...mockFirewallRules]);
     setBlockedConnections([...mockBlockedConnections]);
+
+    // destroy existing chart instances to avoid duplicate/mount issues
+    try {
+      if (bandwidthRef.current?.destroy) bandwidthRef.current.destroy();
+      else if (bandwidthRef.current?.chartInstance?.destroy) bandwidthRef.current.chartInstance.destroy();
+      else if (bandwidthRef.current?.chart?.destroy) bandwidthRef.current.chart.destroy();
+    } catch (e) {}
+    try {
+      if (protocolRef.current?.destroy) protocolRef.current.destroy();
+      else if (protocolRef.current?.chartInstance?.destroy) protocolRef.current.chartInstance.destroy();
+      else if (protocolRef.current?.chart?.destroy) protocolRef.current.chart.destroy();
+    } catch (e) {}
+    try {
+      if (blockedRef.current?.destroy) blockedRef.current.destroy();
+      else if (blockedRef.current?.chartInstance?.destroy) blockedRef.current.chartInstance.destroy();
+      else if (blockedRef.current?.chart?.destroy) blockedRef.current.chart.destroy();
+    } catch (e) {}
+
     setChartKey(prev => prev + 1);
     showNotification('Dashboard refreshed successfully!', 'success');
   }
@@ -348,15 +416,15 @@ export default function FirewallMonitor() {
             </div>
             <div className="card-body chart-compact">
               <Line
+                ref={bandwidthRef}
+                redraw={true}
                 key={`bandwidth-${chartKey}`}
-                data={mockBandwidthData} 
+                data={mockBandwidthData}
                 options={{
-                  responsive: true,
+                  responsive: false,
                   maintainAspectRatio: true,
                   aspectRatio: 1.3,
-                  animation: {
-                    duration: 750
-                  },
+                  animation: false,
                   plugins: {
                     legend: {
                       position: 'top',
@@ -405,15 +473,15 @@ export default function FirewallMonitor() {
             </div>
             <div className="card-body chart-doughnut chart-compact">
               <Doughnut
+                ref={protocolRef}
+                redraw={true}
                 key={`protocol-${chartKey}`}
                 data={mockProtocolData}
                 options={{
-                  responsive: true,
+                  responsive: false,
                   maintainAspectRatio: true,
                   aspectRatio: 1.3,
-                  animation: {
-                    duration: 750
-                  },
+                  animation: false,
                   plugins: {
                     legend: {
                       position: 'bottom',
@@ -438,16 +506,16 @@ export default function FirewallMonitor() {
             </div>
             <div className="card-body chart-compact">
               <Bar
+                ref={blockedRef}
+                redraw={true}
                 key={`blocked-${chartKey}`}
                 data={mockBlockedByReason}
                 options={{
-                  responsive: true,
+                  responsive: false,
                   maintainAspectRatio: true,
                   aspectRatio: 1.3,
                   indexAxis: 'y',
-                  animation: {
-                    duration: 750
-                  },
+                  animation: false,
                   plugins: {
                     legend: {
                       display: false,

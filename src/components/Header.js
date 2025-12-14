@@ -8,7 +8,7 @@ export default function Header({ active }) {
   // Real-time clock and date (24-hour)
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
   });
   const [currentDate, setCurrentDate] = useState(() => {
     const now = new Date();
@@ -18,7 +18,7 @@ export default function Header({ active }) {
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
-      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }));
+      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
       setCurrentDate(now.toLocaleDateString([], { year: 'numeric', month: 'short', day: '2-digit' }));
     }, 1000);
     return () => clearInterval(timer);
