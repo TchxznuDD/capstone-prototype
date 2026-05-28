@@ -3,6 +3,29 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import './Home.css';
 import { mockRecords } from '../data/Matrix.js';
+import computerIcon from '../assets/computer.svg';
+import { ReactComponent as ServerIcon } from '../assets/ServerIcon.svg';
+import { ReactComponent as RouterIcon } from '../assets/Router.svg';
+import { ReactComponent as DatabaseIcon } from '../assets/Database.svg';
+
+function SuccessIcon(props) {
+	return (
+		<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+			<circle cx="12" cy="12" r="9" fill="currentColor" />
+			<path d="M7.9 12.3L10.7 15.1L16.2 9.6" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+		</svg>
+	);
+}
+
+function RiskIcon(props) {
+	return (
+		<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+			<path d="M12 3L22 20H2L12 3Z" fill="currentColor" />
+			<path d="M12 8.25V13.25" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+			<circle cx="12" cy="16.75" r="1.1" fill="#fff" />
+		</svg>
+	);
+}
 
 export default function Home() {
 	const [summary, setSummary] = useState({ totalPCs: 12, pcsOnline: 9, serversOnline: 2, firewallOnline: true, backupsSuccessful: 42 });
@@ -76,7 +99,7 @@ export default function Home() {
 								<div className="value">{summary.totalPCs}</div>
 								<div className="desc">Total endpoints monitored</div>
 							</div>
-							<div className="icon">🖥️</div>
+							<div className="icon"><img src={computerIcon} alt="Computer icon" /></div>
 						</article>
 					</Link>
 
@@ -88,7 +111,7 @@ export default function Home() {
 								<div className="desc">{pcPercent}% online</div>
 								<div className="home-progress" aria-hidden><span style={{ width: `${pcPercent}%` }} /></div>
 							</div>
-							<div className="icon">✅</div>
+							<div className="icon"><SuccessIcon className="home-card-svg check-icon" aria-hidden="true" /></div>
 						</article>
 					</Link>
 
@@ -99,7 +122,7 @@ export default function Home() {
 								<div className="value">{summary.serversOnline}</div>
 								<div className="desc">Servers currently responding</div>
 							</div>
-							<div className="icon">🗄️</div>
+							<div className="icon"><ServerIcon className="home-card-svg" aria-hidden="true" /></div>
 						</article>
 					</Link>
 
@@ -110,7 +133,7 @@ export default function Home() {
 								<div className="value">{summary.firewallOnline ? 'Online' : 'Offline'}</div>
 								<div className="desc">Gateway protection status</div>
 							</div>
-							<div className="icon">🔥</div>
+							<div className="icon"><RouterIcon className="home-card-svg" aria-hidden="true" /></div>
 						</article>
 					</Link>
 
@@ -121,7 +144,7 @@ export default function Home() {
 								<div className="value">{summary.backupsSuccessful}</div>
 								<div className="desc">Successful backups</div>
 							</div>
-							<div className="icon">💾</div>
+							<div className="icon"><DatabaseIcon className="home-card-svg" aria-hidden="true" /></div>
 						</article>
 					</Link>
 
@@ -137,7 +160,7 @@ export default function Home() {
 									<span className="home-badge low">{low} LOW</span>
 								</div>
 							</div>
-							<div className="icon">⚠️</div>
+							<div className="icon"><RiskIcon className="home-card-svg risk-icon" aria-hidden="true" /></div>
 						</article>
 					</Link>
 				</section>

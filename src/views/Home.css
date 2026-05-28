@@ -27,8 +27,12 @@
 .home-card .value { font-size:26px; font-weight:800; color:#111827; }
 .home-card .desc { font-size:13px; color:var(--muted); }
 .home-card .icon { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.03); }
+.home-card .icon svg,
+.home-card .icon img { width:28px; height:28px; object-fit:contain; display:block; }
+.home-card .icon .home-card-svg.check-icon { color:#ff9800; }
+.home-card .icon .home-card-svg.risk-icon { color:#ff9800; }
 .home-progress { width:100%; background: rgba(0,0,0,0.06); height:12px; border-radius:8px; overflow:hidden; margin-top:8px; }
-.home-progress > span { display:block; height:100%; background:linear-gradient(90deg,#4caf50,#8bc34a); width:0%; transition:width 400ms ease; border-radius:8px; }
+.home-progress > span { display:block; height:100%; background:linear-gradient(90deg,#ff9800,#ffb74d); width:0%; transition:width 400ms ease; border-radius:8px; }
 
 /* Feature area */
 .home-feature { margin: 18px 0; }
