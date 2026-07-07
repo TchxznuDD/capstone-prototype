@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import './BackupManagement.css';
 import { ReactComponent as DatabaseIcon } from '../assets/Database.svg';
 import { ReactComponent as BakaupIcon } from '../assets/Bakaup.svg';
-import BakaupOrange from '../assets/BakaupOrange.svg';
 import BakaupGlyph from '../assets/BakaupGlyph.svg';
 import { ReactComponent as CheckIcon } from '../assets/CheckNew.svg';
 
@@ -16,47 +15,46 @@ export default function BackupManagement() {
   };
 
   const [historyList, setHistoryList] = useState([
-    { id:1, date:'2025-11-05', type:'automatic', size:'2.4 GB' },
-    { id:2, date:'2025-11-04', type:'automatic', size:'2.3 GB' },
-    { id:3, date:'2025-11-03', type:'automatic', size:'2.3 GB' },
-    { id:4, date:'2025-11-02', type:'manual', size:'2.2 GB' },
+    { id: 1, date: '2025-11-05', type: 'automatic', size: '2.4 GB' },
+    { id: 2, date: '2025-11-04', type: 'automatic', size: '2.3 GB' },
+    { id: 3, date: '2025-11-03', type: 'automatic', size: '2.3 GB' },
+    { id: 4, date: '2025-11-02', type: 'manual', size: '2.2 GB' },
   ]);
-  const [deleting, setDeleting] = useState(null);
+  const [deleting, setDeleting] = useState(null); // now just an item id
   const [deletePassword, setDeletePassword] = useState('');
   const [notification, setNotification] = useState(null);
   const [backupProgress, setBackupProgress] = useState(0);
   const [isBackingUp, setIsBackingUp] = useState(false);
-  const [isRestoring, setIsRestoring] = useState(false);
-  const [restoring, setRestoring] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloading, setDownloading] = useState(null);
 
   function showNotification(message, type = 'success') {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
   }
 
-  function handleRestore(backupDate, backupSize) {
-    setRestoring({ date: backupDate, size: backupSize });
+  function handleDownload(backupDate, backupSize) {
+    setDownloading({ date: backupDate, size: backupSize });
   }
 
-  function confirmRestore() {
-    setIsRestoring(true);
-    setRestoring(null);
+  function confirmDownload() {
+    setIsDownloading(true);
+    setDownloading(null);
     setTimeout(() => {
-      setIsRestoring(false);
-      showNotification('Backup restored successfully!', 'success');
+      setIsDownloading(false);
+      showNotification('Backup downloaded successfully!', 'success');
     }, 2000);
   }
 
-  function cancelRestore() {
-    setRestoring(null);
-    showNotification('Restore operation cancelled.', 'info');
+  function cancelDownload() {
+    setDownloading(null);
+    showNotification('Download cancelled.', 'info');
   }
 
   function handleStartBackup() {
     setIsBackingUp(true);
     setBackupProgress(0);
-    
-    // Simulate backup progress
+
     const interval = setInterval(() => {
       setBackupProgress(prev => {
         if (prev >= 100) {
@@ -70,25 +68,26 @@ export default function BackupManagement() {
     }, 200);
   }
 
+  // Groups by year -> month only. Each entry is rendered once, individually —
+  // no nested per-day bucket, since dates are already unique per entry.
   function groupByYearMonth(items) {
     const map = {};
-    items.forEach(it => {
-      const d = new Date(it.date);
-      const year = d.getFullYear();
-      const month = d.toLocaleString(undefined, { month: 'long' });
-      const day = d.getDate();
-      map[year] = map[year] || {};
-      map[year][month] = map[year][month] || {};
-      map[year][month][day] = map[year][month][day] || [];
-      map[year][month][day].push(it);
-    });
+    items
+      .slice()
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .forEach(it => {
+        const d = new Date(it.date);
+        const year = d.getFullYear();
+        const month = d.toLocaleString(undefined, { month: 'long' });
+        map[year] = map[year] || {};
+        map[year][month] = map[year][month] || [];
+        map[year][month].push(it);
+      });
     return map;
   }
 
   const historyRef = useRef(null);
-  const [showAllHistory, setShowAllHistory] = useState(false);
 
-  // Automatic backup settings state
   const [autoEnabled, setAutoEnabled] = useState(true);
   const [frequency, setFrequency] = useState('Daily');
   const [backupTime, setBackupTime] = useState('17:00');
@@ -98,18 +97,20 @@ export default function BackupManagement() {
   }
 
   function handleViewBackups() {
-    // scroll to history section smoothly
     if (historyRef.current) {
       historyRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
-  function toggleHistory() {
-    setShowAllHistory(v => !v);
-    // if opening, also scroll so user sees the items
-    if (!showAllHistory && historyRef.current) {
-      setTimeout(() => historyRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  function confirmDelete() {
+    if (deletePassword !== 'admin') {
+      showNotification('Incorrect password. Please try again.', 'error');
+      return;
     }
+    setHistoryList(prev => prev.filter(i => i.id !== deleting));
+    showNotification('Backup deleted successfully!', 'success');
+    setDeleting(null);
+    setDeletePassword('');
   }
 
   return (
@@ -152,7 +153,7 @@ export default function BackupManagement() {
         <section className="left-panel">
           <div className="card manual-backup">
             <div className="manual-top">
-              <div className="manual-thumb"><img src={BakaupGlyph} alt="backup"/></div>
+              <div className="manual-thumb"><img src={BakaupGlyph} alt="backup" /></div>
               <div className="manual-info">
                 <div className="manual-head">
                   <h3>Manual Backup</h3>
@@ -163,16 +164,13 @@ export default function BackupManagement() {
             </div>
             <div className="manual-inline">
               <div className="mini-progress" aria-hidden>
-                <div className="mini-fill" style={{width: `${backupProgress}%`}}></div>
+                <div className="mini-fill" style={{ width: `${backupProgress}%` }}></div>
               </div>
               <div className="mini-label muted small">{backupProgress}%</div>
             </div>
 
             <div className="manual-actions">
               <div className="backup-progress">
-                <div className="progress-bar" aria-hidden>
-                  <div className="progress" style={{width: `${backupProgress}%`}}></div>
-                </div>
                 <div className="muted small">{isBackingUp ? 'Backup in progress...' : 'No recent successful backups'}</div>
               </div>
               <div className="actions">
@@ -186,7 +184,7 @@ export default function BackupManagement() {
 
           <div className="card auto-settings stacked-format">
             <div className="auto-top">
-              <div className="auto-thumb"><img src={BakaupGlyph} alt="automatic backup"/></div>
+              <div className="auto-thumb"><img src={BakaupGlyph} alt="automatic backup" /></div>
               <div className="auto-head">
                 <h3>Automatic Backup Settings</h3>
                 <p className="muted">Configure scheduled automatic backups</p>
@@ -219,62 +217,51 @@ export default function BackupManagement() {
               <button className="btn primary" onClick={handleSaveSettings} disabled={!autoEnabled} aria-disabled={!autoEnabled}>Save Settings</button>
             </div>
           </div>
+
           <div className="card history">
             <h3>Backup History</h3>
             <div className="history-list">
               {(() => {
                 const grouped = groupByYearMonth(historyList);
-                return Object.keys(grouped).sort((a,b) => b - a).map(year => (
-                  <div key={year} style={{marginBottom:6}}>
-                    <div style={{fontWeight:700, marginBottom:8}}>{year}</div>
+                const years = Object.keys(grouped).sort((a, b) => b - a);
+
+                if (years.length === 0) {
+                  return <div className="muted small">No backups yet.</div>;
+                }
+
+                return years.map(year => (
+                  <div key={year} className="history-year">
+                    <div className="year-label">{year}</div>
                     {Object.keys(grouped[year]).map(month => (
-                      <div key={month} style={{marginBottom:8}}>
-                        <div style={{fontWeight:600, color:'#444'}}>{month}</div>
-                        <div style={{display:'grid', gap:8, marginTop:8}}>
-                          {Object.keys(grouped[year][month]).sort((a,b)=>b-a).map(day => {
-                            const itemsForDay = grouped[year][month][day];
-                            const rep = itemsForDay.find(i => i.type === 'automatic') || itemsForDay[0];
-                            const repDate = new Date(rep.date);
-                            const repTime = rep.type === 'automatic' ? new Date(repDate).setHours(17,0,0,0) : repDate;
-                            const displayTime = new Date(repTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+                      <div key={month} className="history-month">
+                        <div className="month-label">{month}</div>
+                        <div className="history-items">
+                          {grouped[year][month].map(item => {
+                            const d = new Date(item.date);
+                            const label = d.toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
                             return (
-                              <div key={day} className="history-item" style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
-                                <div style={{flex:1, display:'flex', flexDirection:'column', gap:8}}>
-                                  <div style={{display:'flex', gap:12, alignItems:'center'}}>
-                                    <div className={`status-dot ${itemsForDay[0].type}`}></div>
-                                    <div>
-                                      <div className="hi-date">{month} {day}</div>
-                                      <div className="muted small">{itemsForDay.length} backup(s)</div>
-                                      <div className="muted small hi-time">{displayTime}</div>
+                              <div key={item.id} className="history-item">
+                                <div className="hi-left">
+                                  <div className={`status-dot ${item.type}`}></div>
+                                  <div>
+                                    <div className="hi-date">{label}</div>
+                                    <div className="hi-tags">
+                                      <div className={`type-pill ${item.type}`}>{item.type}</div>
+                                      <div className="muted small">{item.size}</div>
                                     </div>
-                                  </div>
-
-                                  <div className="day-list">
-                                    {itemsForDay.map(it => {
-                                      const d = new Date(it.date);
-                                      const timeVal = it.type === 'automatic' ? new Date(d).setHours(17,0,0,0) : d;
-                                      const timeStr = new Date(timeVal).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                                      return (
-                                        <div key={it.id} className="day-entry">
-                                          <div className="entry-time muted small">{timeStr}</div>
-                                          <div className={`type-pill ${it.type}`}>{it.type}</div>
-                                          <div className="muted small">{it.size}</div>
-                                        </div>
-                                      );
-                                    })}
                                   </div>
                                 </div>
 
-                                <div style={{width:160, display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6}}>
-                                  <div className="muted small">{itemsForDay.map(it => it.size).join(', ')}</div>
-                                  <div style={{marginTop:'auto'}}>
-                                    <div className="hi-actions" style={{display:'flex', gap:8}}>
-                                      <button className="btn danger" onClick={() => { setDeleting({ year, month, day }); setDeletePassword(''); }}>Delete</button>
-                                      <button className="btn primary" onClick={() => handleRestore(`${month} ${day}, ${year}`, itemsForDay[0].size)} disabled={isRestoring}>
-                                        {isRestoring ? 'Restoring...' : 'Restore'}
-                                      </button>
-                                    </div>
+                                <div className="hi-right">
+                                  <div className="hi-actions">
+                                    <button className="btn danger" onClick={() => { setDeleting(item.id); setDeletePassword(''); }}>Delete</button>
+                                    <button
+                                      className="btn primary"
+                                      onClick={() => handleDownload(`${label}, ${year}`, item.size)}
+                                      disabled={isDownloading}
+                                    >
+                                      {isDownloading ? 'Downloading...' : 'Download'}
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -297,42 +284,44 @@ export default function BackupManagement() {
           </div>
         </section>
       </main>
-      {restoring && (
+
+      {downloading && (
         <div className="modal modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-content">
-            <h3>Restore Backup</h3>
+            <h3>Download Backup</h3>
             <div className="warning-row">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="16" r="14" fill="url(#restoreGradientBackup)"/>
-                <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
+                <circle cx="16" cy="16" r="14" fill="url(#restoreGradientBackup)" />
+                <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
                 <defs>
                   <linearGradient id="restoreGradientBackup" x1="2" y1="2" x2="30" y2="30">
-                    <stop offset="0%" stopColor="#ff7b00"/>
-                    <stop offset="100%" stopColor="#ff4b00"/>
+                    <stop offset="0%" stopColor="#ff7b00" />
+                    <stop offset="100%" stopColor="#ff4b00" />
                   </linearGradient>
                 </defs>
               </svg>
-              <p>Are you sure you want to restore the backup from <strong>{restoring.date}</strong> ({restoring.size})? This will replace your current data.</p>
+              <p>Are you sure you want to download the backup from <strong>{downloading.date}</strong> ({downloading.size})? A copy will be saved to your device.</p>
             </div>
             <div className="form-actions">
-              <button className="btn" onClick={cancelRestore}>Cancel</button>
-              <button className="btn primary" onClick={confirmRestore}>Restore</button>
+              <button className="btn" onClick={cancelDownload}>Cancel</button>
+              <button className="btn primary" onClick={confirmDownload}>Download</button>
             </div>
           </div>
         </div>
       )}
-      {deleting && (
+
+      {deleting !== null && (
         <div className="modal modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-content">
             <h3>Delete Backup</h3>
             <div className="warning-row">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="16" cy="16" r="14" fill="url(#warnGradient)"/>
-                <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"/>
+                <circle cx="16" cy="16" r="14" fill="url(#warnGradient)" />
+                <path d="M16 10v8M16 22v1" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
                 <defs>
                   <linearGradient id="warnGradient" x1="2" y1="2" x2="30" y2="30">
-                    <stop offset="0%" stopColor="#ff9800"/>
-                    <stop offset="100%" stopColor="#ff6b00"/>
+                    <stop offset="0%" stopColor="#ff9800" />
+                    <stop offset="100%" stopColor="#ff6b00" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -340,9 +329,9 @@ export default function BackupManagement() {
             </div>
             <div className="form-row">
               <label>Enter password to confirm:</label>
-              <input 
-                type="password" 
-                value={deletePassword} 
+              <input
+                type="password"
+                value={deletePassword}
                 onChange={e => setDeletePassword(e.target.value)}
                 placeholder="Enter admin password"
                 autoFocus
@@ -350,20 +339,12 @@ export default function BackupManagement() {
             </div>
             <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
               <button className="btn" onClick={() => { setDeleting(null); setDeletePassword(''); }}>Cancel</button>
-              <button className="btn primary" onClick={() => { 
-                if (deletePassword !== 'admin') {
-                  showNotification('Incorrect password. Please try again.', 'error');
-                  return;
-                }
-                setHistoryList(prev => prev.filter(i => i.id !== deleting)); 
-                showNotification('Backup deleted successfully!', 'success'); 
-                setDeleting(null);
-                setDeletePassword('');
-              }}>Delete</button>
+              <button className="btn primary" onClick={confirmDelete}>Delete</button>
             </div>
           </div>
         </div>
       )}
+
       {notification && (
         <div className={`toast-notification ${notification.type}`}>
           <div className="toast-icon">
@@ -402,7 +383,7 @@ function FrequencyDropdown({ value, onChange, disabled }) {
   }
 
   return (
-    <div className="dropdown" ref={ref} style={{opacity: disabled ? 0.6 : 1}}>
+    <div className="dropdown" ref={ref} style={{ opacity: disabled ? 0.6 : 1 }}>
       <button className="dropdown-toggle" onClick={() => !disabled && setOpen(s => !s)} aria-haspopup="true" aria-expanded={open} disabled={disabled}>
         {value} ▾
       </button>

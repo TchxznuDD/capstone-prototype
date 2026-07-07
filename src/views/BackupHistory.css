@@ -1,6 +1,6 @@
 /* BackupHistory specific styles to match Computer dashboard spacing and card layout */
-
-/* Page root spacing removed - now handled in BackupManagement.css */
+/* Shared card/history-row/button styles live in BackupManagement.css, which this
+   page already imports directly — no need to duplicate them here. */
 
 .backup-history .hero-text h2 {
   margin: 0;
@@ -134,12 +134,3 @@
 /* Date-button colors: ensure visible in both themes */
 .backup-history .date-picker .btn { background: rgba(255,255,255,0.02); color: #111; border: 1px solid rgba(0,0,0,0.06) }
 .dark-mode .backup-history .date-picker .btn { background: rgba(255,255,255,0.04); color: var(--text-primary); border: 1px solid var(--input-border) }
-
-/* Day entries and actions spacing */
-.backup-history .history-item { align-items: flex-start; padding:10px; border-radius:8px; border:1px solid #f0f0f0 }
-.backup-history .day-list { margin-top:8px; display:flex; flex-direction:column; gap:6px }
-.backup-history .day-entry { display:flex; align-items:center; gap:10px }
-.backup-history .entry-time { font-weight:700; width:68px; color:#222 }
-
-/* Buttons in the history card should sit at the bottom-right */
-.backup-history .hi-actions { display:flex; gap:8px }

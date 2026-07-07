@@ -20,6 +20,155 @@
   --form-right-width: 160px; /* width of the right-side action column inside the form */
 }
 
+/* ============================================
+   Modal Styles
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  width: 720px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content h3 {
+  margin: 0 0 24px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.modal-body {
+  padding: 0 8px;
+  overflow-y: auto;
+  background: transparent;
+  max-height: calc(90vh - 100px);
+}
+
+.modal-body form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 20px;
+}
+
+.modal-body .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-body .form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.modal-body .form-group {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.modal-body .form-group-title {
+  grid-column: 1 / -1;
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  grid-column: 1 / -1;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 8px;
+}
+
+.btn-cancel {
+  background: #fff;
+  color: #666;
+  border: 2px solid #ddd;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: #ffffff;
+  border: none;
+  padding: 11px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Layout Container */
 .risk-stats-section,
 .risk-content-section {
@@ -88,7 +237,14 @@
 
 .chart-left .form-grid { grid-template-columns: 1fr var(--form-right-width); gap: 20px; }
 
-.chart-right .card-body { overflow: visible; height: auto; min-height: 0; }
+.chart-right .card-body { 
+  overflow: visible; 
+  height: auto; 
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
 .stat-card {
   background: var(--card-bg);
@@ -171,104 +327,105 @@
   gap: 10px;
 }
 
-.form-left label {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-dark);
+.form-left label,
+.modal-body label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
   display: flex;
   align-items: center;
-  gap: 8px;
-  letter-spacing: 0.3px;
+  gap: 6px;
+  margin-bottom: 0;
+}
+
+.modal-body .field-help-text {
+  margin: -2px 0 4px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #6b7280;
 }
 
 .info-icon {
-  color: var(--accent-orange);
+  color: #ff9800;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   transition: all 0.2s ease;
+  opacity: 0.8;
 }
 
 .info-icon:hover {
-  color: #e67c00;
+  color: #f57c00;
+  opacity: 1;
   transform: scale(1.1);
 }
 
 .form-left select,
-.form-left input {
+.form-left input,
+.modal-body select,
+.modal-body input,
+.modal-body textarea {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #e6e6e6;
+  padding: 10px 14px;
+  border: 1.5px solid #d1d5db;
   border-radius: 8px;
-  font-size: 15px;
-  background: var(--card-bg);
+  font-size: 14px;
+  background: #fff;
   transition: all 0.2s ease;
   font-family: inherit;
-  color: var(--text-dark);
-  font-weight: 500;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.modal-body textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
 }
 
 .form-left select:focus,
-.form-left input:focus {
+.form-left input:focus,
+.modal-body select:focus,
+.modal-body input:focus,
+.modal-body textarea:focus {
   outline: none;
-  border-color: var(--accent-orange);
-  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.08);
+  border-color: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
   background: #fffbf5;
 }
 
 .form-left select:hover,
-.form-left input:hover {
-  border-color: #cbd5e1;
+.form-left input:hover,
+.modal-body select:hover,
+.modal-body input:hover,
+.modal-body textarea:hover {
+  border-color: #9ca3af;
 }
 
 /* Dropdown list appearance - make options look like the example image */
-.form-left select {
-  background: #ffffff;
+.form-left select,
+.modal-body select {
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  appearance: none;
-  padding-right: 12px;
-  border: 1px solid #e6e6e6;
+  padding-right: 36px;
   cursor: pointer;
-  transition: none !important;
-  box-sizing: border-box;
-}
-
-.form-left select option {
-  background: #ffffff;
-  color: #111827;
-  padding: 10px 14px;
-}
-
-.form-left select option:hover {
-  background: #f8f9fb;
-}
-
-/* Keep the dropdown visually above other elements when opened */
-.form-left select:focus {
-  outline: none;
-  box-shadow: none !important;
-  border-color: #ff9800;
-}
-
-/* wrapper for select so we can show a persistent arrow icon */
-.select-wrapper {
-  position: relative;
-}
-.select-wrapper::after {
-  content: '';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 12px;
-  height: 8px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23777' d='M6 8L0 0h12z'/></svg>");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  pointer-events: none;
+  background-position: right 12px center;
+  background-size: 12px;
 }
 
-/* ensure wrapper doesn't clip dropdown on some browsers */
-.select-wrapper select { width: 100%; }
+.form-left select option,
+.modal-body select option {
+  background: #fff;
+  color: #333;
+  padding: 10px;
+}
+
+.form-left select:focus,
+.modal-body select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ff9800' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+}
 
 /* vulnerability help tooltip shown when user clicks the info icon */
 .vuln-tooltip{
@@ -523,13 +680,12 @@
 
 .delete-icon-btn svg { display: block; }
 
-/* table wrapper: limit height and enable scrolling when records exceed available space */
+/* table wrapper: enable horizontal scrolling while allowing natural vertical growth */
 .chart-right .table-wrapper {
-  /* Cap vertical growth so horizontal scrollbar remains visible; allow scrolling */
+  /* Allow table to grow/shrink naturally with content - no fixed height */
   width: 100%;
-  max-height: 60vh; /* let the table grow but not beyond viewport; adjust if needed */
   overflow-x: auto; /* horizontal scroll when table wider than container */
-  overflow-y: auto; /* vertical scroll when rows exceed max-height */
+  overflow-y: visible; /* allow natural vertical expansion/contraction */
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
   padding-bottom: 8px;
@@ -539,7 +695,11 @@
 .chart-right .table-wrapper .risk-table { min-width: 900px; }
 
 /* Remove extra horizontal margins from the nested monitor-table so card content sits correctly */
-.chart-right .monitor-table { margin: 0; padding: 0; }
+.chart-right .monitor-table { 
+  margin: 0; 
+  padding: 0;
+  flex: 1 1 auto; /* allow natural growth and shrinking with content */
+}
 .chart-right .monitor-table .card-header { padding: 12px 16px; }
 
 .risk-table tbody tr {
@@ -709,6 +869,54 @@
   --shadow-md: 0 6px 20px rgba(0,0,0,0.75);
 }
 
+/* Dark mode modal */
+.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .modal-content {
+  background: #1e293b;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  background: #1e293b;
+}
+
+.dark-mode .modal-header h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .modal-body {
+  background: #1a2332;
+}
+
+.dark-mode .modal-actions {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .modal-close {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+}
+
+.dark-mode .modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+.dark-mode .btn-cancel {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
 .dark-mode .stat-card {
   background: var(--card-bg);
   border: 1px solid rgba(255,255,255,0.04);
@@ -728,14 +936,15 @@
 
 .dark-mode .form-left select:focus,
 .dark-mode .form-left input:focus {
-  background: rgba(255,152,0,0.04);
-  box-shadow: 0 0 0 4px rgba(255,152,0,0.04);
+  background: rgba(255,152,0,0.05);
+  box-shadow: 0 0 0 3px rgba(255,152,0,0.15);
+  border-color: var(--accent-orange);
 }
 
 .dark-mode .form-left select,
 .dark-mode .form-left input {
-  background: var(--card-bg); /* use the card/padding color */
-  border-color: rgba(255,255,255,0.03);
+  background: #1f1f1f;
+  border-color: rgba(255,255,255,0.08);
   color: var(--text-dark);
 }
 
@@ -1117,11 +1326,5 @@
   margin-top: 12px;
   box-shadow: none; /* keep visual elevation handled by the parent card */
   overflow: visible !important; /* allow inner .table-wrapper to scroll without being clipped */
-}
-
-/* Ensure the right card gives some vertical room for the table wrapper to layout */
-.chart-right .card-body {
-  /* increase vertical space for the right card so the table wrapper can expand */
-  min-height: 520px;
 }
 
