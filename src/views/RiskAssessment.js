@@ -153,7 +153,7 @@ export default function RiskAssessment() {
 
         <div className="external-refresh">
           <button className="refresh-btn" onClick={() => setShowModal(true)}>
-            + Create Risk
+            Add New Risk
           </button>
         </div>
       </div>

@@ -27,6 +27,15 @@ function RiskIcon(props) {
 	);
 }
 
+function HomeCardIcon({ kind }) {
+	if (kind === 'computer') return <img src={computerIcon} alt="" aria-hidden="true" />;
+	if (kind === 'success') return <SuccessIcon className="home-card-svg check-icon" aria-hidden="true" />;
+	if (kind === 'server') return <ServerIcon className="home-card-svg" aria-hidden="true" />;
+	if (kind === 'router') return <RouterIcon className="home-card-svg" aria-hidden="true" />;
+	if (kind === 'database') return <DatabaseIcon className="home-card-svg" aria-hidden="true" />;
+	return <RiskIcon className="home-card-svg risk-icon" aria-hidden="true" />;
+}
+
 export default function Home() {
 	const [summary, setSummary] = useState({ totalPCs: 12, pcsOnline: 9, serversOnline: 2, firewallOnline: true, backupsSuccessful: 42 });
 
@@ -52,6 +61,63 @@ export default function Home() {
 	const pcPercent = summary.totalPCs ? Math.round((summary.pcsOnline / summary.totalPCs) * 100) : 0;
 
 	const router = { name: 'MikroTik RB750Gr3', subtitle: 'RouterOS v7.14 (hEX)', status: 'online', ip: '192.168.1.1', uptime: '31 days, 8 hours' };
+
+	const homeCards = [
+		{
+			key: 'endpoints',
+			label: 'Endpoints',
+			value: summary.totalPCs,
+			desc: 'Total endpoints monitored',
+			link: '/computer',
+			icon: 'computer'
+		},
+		{
+			key: 'online',
+			label: 'PCs Online',
+			value: summary.pcsOnline,
+			desc: `${pcPercent}% online`,
+			link: '/computer',
+			icon: 'success',
+			progress: pcPercent
+		},
+		{
+			key: 'servers',
+			label: 'Servers',
+			value: summary.serversOnline,
+			desc: 'Servers currently responding',
+			link: '/server-status',
+			icon: 'server'
+		},
+		{
+			key: 'firewall',
+			label: 'Firewall',
+			value: summary.firewallOnline ? 'Online' : 'Offline',
+			desc: 'Gateway protection status',
+			link: '/firewall/monitor',
+			icon: 'router'
+		},
+		{
+			key: 'backups',
+			label: 'Backups',
+			value: summary.backupsSuccessful,
+			desc: 'Successful backups',
+			link: '/backup',
+			icon: 'database'
+		},
+		{
+			key: 'risk',
+			label: 'Risk Items',
+			value: counts.total || 0,
+			link: '/risk-assessment',
+			icon: 'risk',
+			badges: [
+				{ className: 'extreme', text: `${extreme} EXT` },
+				{ className: 'high', text: `${high} HIGH` },
+				{ className: 'medium', text: `${medium} MED` },
+				{ className: 'low', text: `${low} LOW` }
+			]
+		}
+	];
 
 	// Local toast notification for quick mock actions (Start Backup)
 	const [notification, setNotification] = useState(null);
@@ -92,80 +158,41 @@ export default function Home() {
 
 				<div className="home-container">
 				<section className="home-stats" aria-label="At a glance summary">
-					<Link to="/computer" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">Endpoints</div>
-								<div className="value">{summary.totalPCs}</div>
-								<div className="desc">Total endpoints monitored</div>
-							</div>
-							<div className="icon"><img src={computerIcon} alt="Computer icon" /></div>
-						</article>
-					</Link>
-
-					<Link to="/computer" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">PCs Online</div>
-								<div className="value">{summary.pcsOnline}</div>
-								<div className="desc">{pcPercent}% online</div>
-								<div className="home-progress" aria-hidden><span style={{ width: `${pcPercent}%` }} /></div>
-							</div>
-							<div className="icon"><SuccessIcon className="home-card-svg check-icon" aria-hidden="true" /></div>
-						</article>
-					</Link>
-
-					<Link to="/server-status" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">Servers</div>
-								<div className="value">{summary.serversOnline}</div>
-								<div className="desc">Servers currently responding</div>
-							</div>
-							<div className="icon"><ServerIcon className="home-card-svg" aria-hidden="true" /></div>
-						</article>
-					</Link>
-
-					<Link to="/firewall/monitor" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">Firewall</div>
-								<div className="value">{summary.firewallOnline ? 'Online' : 'Offline'}</div>
-								<div className="desc">Gateway protection status</div>
-							</div>
-							<div className="icon"><RouterIcon className="home-card-svg" aria-hidden="true" /></div>
-						</article>
-					</Link>
-
-					<Link to="/backup" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">Backups</div>
-								<div className="value">{summary.backupsSuccessful}</div>
-								<div className="desc">Successful backups</div>
-							</div>
-							<div className="icon"><DatabaseIcon className="home-card-svg" aria-hidden="true" /></div>
-						</article>
-					</Link>
-
-					<Link to="/risk-assessment" className="home-card-link">
-						<article className="home-card">
-							<div className="meta">
-								<div className="label">Risk Items</div>
-								<div className="value">{counts.total || 0}</div>
-								<div className="home-badges">
-									<span className="home-badge extreme">{extreme} EXT</span>
-									<span className="home-badge high">{high} HIGH</span>
-									<span className="home-badge medium">{medium} MED</span>
-									<span className="home-badge low">{low} LOW</span>
+					{homeCards.map(card => (
+						<Link key={card.key} to={card.link} className="home-card-link">
+							<article className={`home-card ${card.key === 'risk' ? 'home-card-risk' : ''}`}>
+								<div className="meta">
+									<div className="label">{card.label}</div>
+									<div className={`value ${card.key === 'firewall' ? 'status-value' : ''}`}>{card.value}</div>
+									{card.desc && <div className="desc">{card.desc}</div>}
+									{card.progress != null && (
+										<div className="home-progress" aria-hidden>
+											<span style={{ width: `${card.progress}%` }} />
+										</div>
+									)}
+									{card.badges && (
+										<div className="home-badges">
+											{card.badges.map(badge => (
+												<span key={`${card.key}-${badge.className}`} className={`home-badge ${badge.className}`}>{badge.text}</span>
+											))}
+										</div>
+									)}
 								</div>
-							</div>
-							<div className="icon"><RiskIcon className="home-card-svg risk-icon" aria-hidden="true" /></div>
-						</article>
-					</Link>
+								<div className="icon"><HomeCardIcon kind={card.icon} /></div>
+							</article>
+						</Link>
+					))}
 				</section>
 
 				<section className="home-feature">
+					<div className="section-heading">
+						<div>
+							<p className="section-eyebrow">Operations snapshot</p>
+							<h4>Router status and live risk breakdown</h4>
+						</div>
+						<p className="section-note">Key systems are grouped here so the page stays readable at a glance.</p>
+					</div>
+
 					<div className="feature-grid">
 						<div className="feature-left">
 							<div className="mikrotik card">
@@ -205,7 +232,10 @@ export default function Home() {
 
 				<section className="home-panels">
 					<div className="panel card">
-						<h4>Quick Actions</h4>
+						<div className="panel-heading">
+							<p className="section-eyebrow">Shortcuts</p>
+							<h4>Quick actions for routine work</h4>
+						</div>
 						<p className="muted">Common maintenance and response actions for the site.</p>
 						<div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
 							<button className="action-btn">Start Backup</button>

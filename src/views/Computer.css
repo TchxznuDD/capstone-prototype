@@ -1082,7 +1082,19 @@ body {
 .form-row { display:flex; flex-direction:column; gap:6px; margin-bottom:10px }
 .form-row label { font-size:13px; color:#333 }
 .form-row input, .form-row select { padding:8px 10px; border-radius:6px; border:1px solid #e6e6e6 }
-.form-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:8px }
+.form-actions {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  text-align: right;
+}
+.form-actions .btn {
+  display: inline-flex;
+  align-items: center;
+}
+.form-actions .btn + .btn {
+  margin-left: 10px;
+}
 .btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer }
 .btn.primary { background:#ff7b00; color:#fff; font-weight:800 }
 

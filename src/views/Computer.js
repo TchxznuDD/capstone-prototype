@@ -448,7 +448,7 @@ function AddEditModal({ open, mode, buildings, buildingId, setBuildingId, onClos
           <input name="ip" value={form.ip} onChange={e => setForm(f => ({...f, ip: e.target.value}))} />
         </div>
         {/* Status is assigned automatically based on IP presence; user cannot set it manually. */}
-        <div className="form-actions">
+        <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10, width: '100%' }}>
           <button className="btn" onClick={onClose}>Cancel</button>
           <button className="btn primary" onClick={onSave}>{mode === 'add' ? 'Add' : 'Save'}</button>
         </div>
@@ -471,7 +471,7 @@ function AddBuildingModal({ open, onClose, onSave, form, setForm }) {
           <label>Location Type (Small Description)</label>
           <input name="subtitle" value={form.subtitle} onChange={e => setForm(f => ({...f, subtitle: e.target.value}))} />
         </div>
-        <div className="form-actions">
+        <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10, width: '100%' }}>
           <button className="btn" onClick={onClose}>Cancel</button>
           <button className="btn primary" onClick={onSave}>Add Building</button>
         </div>
@@ -500,7 +500,7 @@ function SelectEditModal({ open, onClose, buildings, buildingId, setBuildingId, 
             {stations.map(s => <option key={s.id} value={s.id}>{s.name} ({s.host})</option>)}
           </select>
         </div>
-        <div className="form-actions">
+        <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10, width: '100%' }}>
           <button className="btn" onClick={onClose}>Cancel</button>
           <button className="btn primary" onClick={onConfirm} disabled={!stationId}>Edit Selected</button>
         </div>
