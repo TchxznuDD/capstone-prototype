@@ -9,27 +9,24 @@
 }
 /* Backup Management styles */
 
-/* match Computer.css dashboard padding and hero spacing */
 .backup-root { padding: 0; }
 .backup-root .hero-row { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:32px; border-bottom:1.5px solid rgba(0,0,0,0.06); padding-bottom:18px; padding-left: 48px; padding-right: 48px; padding-top: 24px; }
 
-/* BackupManagement grid padding - matches .buildings-col from Computer.css */
-.backup-root:not(.backup-history) .backup-grid { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 20px; 
-  align-items: start; 
+.backup-root:not(.backup-history) .backup-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
   margin-top: 20px;
   padding-left: 48px;
   padding-right: 48px;
   padding-bottom: 48px;
 }
 
-/* BackupHistory uses same padding */
 .backup-history .backup-grid {
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 20px; 
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
   align-items: start;
   padding-left: 48px;
   padding-right: 48px;
@@ -37,8 +34,7 @@
 }
 
 .metrics-cards { display: flex; gap: 18px; margin-bottom: 12px; }
-.metric-card { background: #fff; padding: 18px; border-radius: 12px; box-shadow: 0 12px 30px rgba(15,23,42,0.06); flex:1; position: relative; }
-.metric-card { transition: transform 180ms ease, box-shadow 180ms ease; }
+.metric-card { background: #fff; padding: 18px; border-radius: 12px; box-shadow: 0 12px 30px rgba(15,23,42,0.06); flex:1; position: relative; transition: transform 180ms ease, box-shadow 180ms ease; }
 .metric-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(15,23,42,0.08); }
 .metric-card .label { color:#666; font-size:13px; margin:0 }
 .metric-card .value { font-size:28px; font-weight:800; margin:6px 0 }
@@ -47,23 +43,12 @@
 .metric-card .stat-icon .icon-bg { width:44px; height:44px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 8px 18px rgba(15,23,42,0.06); background: #f6f9ff }
 .metric-card .stat-icon .icon-bg.green { background: rgba(40,167,69,0.12) }
 .metric-card .stat-icon .icon-bg.storage { background: rgba(255,75,0,0.12) }
-.metric-card .stat-icon .icon-bg img { width:20px; height:20px; display:block; }
 .metric-card .stat-icon .icon-bg svg,
-.metric-card .stat-icon .icon-bg .stat-svg {
-  width:20px;
-  height:20px;
-  display:block;
-}
-/* Slightly larger icons for Storage and Total Backups */
-.metric-card.storage .stat-icon .icon-bg img,
-.metric-card.total .stat-icon .icon-bg img,
+.metric-card .stat-icon .icon-bg .stat-svg { width:20px; height:20px; display:block; }
 .metric-card.storage .stat-icon .icon-bg svg,
 .metric-card.total .stat-icon .icon-bg svg,
 .metric-card.storage .stat-icon .icon-bg .stat-svg,
-.metric-card.total .stat-icon .icon-bg .stat-svg {
-  width:28px;
-  height:28px;
-}
+.metric-card.total .stat-icon .icon-bg .stat-svg { width:28px; height:28px; }
 
 .left-panel { display:flex; flex-direction: column; gap:18px }
 .card { background:#fff; padding:18px; border-radius:12px; box-shadow: 0 12px 30px rgba(15,23,42,0.06); }
@@ -81,23 +66,12 @@
   box-shadow: 0 10px 24px rgba(255,123,0,0.10);
 }
 .manual-backup .btn.primary:hover { transform: translateY(-2px); }
-/* Manual backup improvements */
 .card.manual-backup { position: relative }
 .manual-inline { position: absolute; top: 12px; right: 12px; display:flex; align-items:center; gap:8px }
 .mini-progress { width:180px; height:8px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden }
 .mini-progress .mini-fill { height:100%; width:0%; background: linear-gradient(90deg,#ff7b00,#ff4b00); transition: width 360ms ease }
 .mini-label { min-width:40px; text-align:right }
-.manual-thumb {
-  width:56px;
-  height:56px;
-  border-radius:12px;
-  background: rgba(255,123,0,0.08);
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow: 0 8px 18px rgba(15,23,42,0.04);
-  flex:0 0 56px;
-}
+.manual-thumb { width:56px; height:56px; border-radius:12px; background: rgba(255,123,0,0.08); display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 8px 18px rgba(15,23,42,0.04); flex:0 0 56px; }
 .manual-thumb img { width:36px; height:36px; display:block }
 .manual-info h3 { margin:0; font-size:18px }
 .manual-top { display:flex; gap:12px; align-items:center }
@@ -105,22 +79,15 @@
 .manual-head p { margin:6px 0 0 0 }
 .manual-actions { display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:12px }
 .backup-progress { flex:1 }
-.progress-bar { height:8px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; width:220px; margin-bottom:6px; }
-.progress-bar .progress { height:100%; background: linear-gradient(90deg,#28a745,#0b8f36); width:0%; transition:width 360ms ease }
-/* hide the large progress bar in manual actions (we show a compact one in the card corner) */
-.manual-actions .progress-bar { display: none }
 .actions { display:flex; gap:8px }
 .btn.secondary { background:transparent; border:1px solid #eee }
 .manual-actions .muted.small { color: #666; margin-top:0 }
 
-.auto-settings { display:flex; flex-direction:column; align-items:flex-start; }
-.auto-settings { position: relative }
+.auto-settings { display:flex; flex-direction:column; align-items:flex-start; position: relative }
 .auto-settings .form-row { display:flex; align-items:center; gap:12px; margin-top:10px; width:100%; justify-content:flex-start }
 .auto-settings .form-row label { width:140px; margin:0; text-align:left }
-.toggle { width:42px; height:24px; border-radius:16px; background: #ff7b00; color:#fff; display:inline-flex; align-items:center; justify-content:center }
 .form-row input { padding:10px; border-radius:8px; border:1px solid #eee; width:100% }
 
-/* Toggle switch */
 .toggle-switch { display:inline-block; }
 .toggle-switch input { display:none }
 .toggle-switch .slider { display:inline-block; width:52px; height:28px; background:#e6e6e6; border-radius:999px; position:relative; vertical-align:middle }
@@ -128,7 +95,6 @@
 .toggle-switch input:checked + .slider { background:#FF4B00 }
 .toggle-switch input:checked + .slider:before { transform: translateX(24px) }
 
-/* select and time input */
 .auto-settings select, .auto-settings input[type="time"] {
   padding:10px; border-radius:8px; border:1px solid #eee; width:auto; background:#fff; font-size:14px; flex:1;
   transition: box-shadow 180ms ease, transform 140ms ease, border-color 180ms ease, background-color 180ms ease;
@@ -140,38 +106,45 @@
   box-shadow: 0 8px 20px rgba(255,123,0,0.12);
   background-color: #fff;
 }
-.auto-settings select:hover, .auto-settings input[type="time"]:hover {
-  transform: translateY(-1px);
-}
+.auto-settings select:hover, .auto-settings input[type="time"]:hover { transform: translateY(-1px); }
 .auto-settings select:disabled, .auto-settings input[type="time"]:disabled { opacity:0.6 }
 
 .auto-settings .save-row { width:100%; margin-top:12px }
 .auto-settings .save-row .btn.primary { width:100%; }
+.auto-settings .save-row .btn.primary[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* disabled primary button inside auto-settings */
-.auto-settings .save-row .btn.primary[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+/* ---- Backup history: flat per-entry list, grouped only by year/month ---- */
+.history-list { display:flex; flex-direction: column; gap:28px; margin-top:16px }
+.history-year { display:flex; flex-direction:column; gap:14px }
+.year-label { font-weight:700; font-size:15px }
+.history-month { display:flex; flex-direction:column; gap:12px }
+.month-label { font-weight:600; color:#444; margin-bottom:2px }
+.history-items { display:flex; flex-direction:column; gap:12px }
+
+.history-item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 20px;
+  border-radius:10px;
+  border:1px solid #f0f0f0;
+  min-height:64px;
 }
-
-.history-list { display:flex; flex-direction: column; gap:12px; margin-top:12px }
-.history-item { display:flex; justify-content:space-between; align-items:flex-start; padding:10px; border-radius:8px; border:1px solid #f0f0f0; min-height:72px }
-.hi-left { display:flex; gap:10px; align-items:center }
-.status-dot { width:12px; height:12px; border-radius:50% }
+.hi-left { display:flex; gap:16px; align-items:center }
+.status-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0 }
 .status-dot.automatic { background:#0b8f36 }
 .status-dot.manual { background:#ff9800 }
-.hi-date { font-weight:700 }
-.hi-actions .btn { background: transparent; border:1px solid #eee; padding:6px 10px }
+.hi-date { font-weight:700; margin-bottom:6px }
+.hi-tags { display:flex; align-items:center; gap:10px }
 
-/* small time under the date for a compact look */
-.hi-time { font-size:12px; color:#777; margin-top:6px }
+.hi-right { display:flex; align-items:center; gap:20px }
+.hi-actions { display:flex; gap:10px }
+.hi-actions .btn { background: transparent; border:1px solid #eee; padding:7px 12px }
 
-/* make per-entry times small and muted when using the small utility classes */
-.day-entry .entry-time.muted.small { font-weight:600; font-size:12px; color:#777; width:68px }
+.type-pill { display:inline-block; font-size:12px; padding:3px 10px; border-radius:999px; text-transform:capitalize; font-weight:700 }
+.type-pill.automatic { background: rgba(11,143,54,0.08); color:#0b8f36 }
+.type-pill.manual { background: rgba(255,152,0,0.08); color:#ff9800 }
 
-/* Make restore button orange-style to match primary buttons */
 .hi-actions .btn.primary {
   background: linear-gradient(90deg,#ff7b00,#ff4b00);
   color: #fff;
@@ -186,10 +159,9 @@
 .hi-actions .btn.primary:hover { transform: translateY(-1px); }
 
 .history-list .btn.secondary { padding:6px 12px; border-radius:8px }
-
 .history-controls { margin-top:12px; text-align:left }
 
-/* Centered stacked layout for Automatic Backup to match requested format */
+/* Centered stacked layout for Automatic Backup */
 .auto-settings.stacked-format { align-items: flex-start }
 .auto-top { display:flex; gap:12px; align-items:center; margin-bottom:8px }
 .auto-thumb { width:56px; height:56px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,123,0,0.08); box-shadow: 0 8px 18px rgba(15,23,42,0.04); flex:0 0 56px }
@@ -206,7 +178,6 @@
 .auto-settings.stacked-format .save-row { width:100%; margin-top:12px }
 .auto-settings.stacked-format .save-row .btn.primary { width:100%; padding:12px 18px; font-size:16px; font-weight:800; background: linear-gradient(90deg,#ff7b00,#ff4b00); color:#fff; box-shadow: 0 10px 24px rgba(255,123,0,0.10); }
 
-/* Dropdown styles specific to the auto-settings card so the toggle is visible on white cards */
 .auto-settings .dropdown { position: relative; display: inline-block }
 .auto-settings .dropdown-toggle {
   background: #fff;
@@ -237,7 +208,6 @@
 .auto-settings .dropdown-menu .link-like { display:block; width:100%; text-align:left; padding:6px 12px; border-radius:6px; background:transparent; border:none; color:inherit }
 .auto-settings .dropdown-menu .link-like:hover { background: rgba(0,0,0,0.04) }
 
-/* Dark-mode overrides for the backup dropdown so options remain readable */
 .dark-mode .auto-settings .dropdown-toggle {
   background-color: var(--bg-card);
   color: var(--text-primary);
@@ -249,40 +219,21 @@
   border: 1px solid var(--border-color);
   box-shadow: 0 12px 36px rgba(0,0,0,0.6);
 }
-.dark-mode .auto-settings .dropdown-menu .link-like {
-  color: var(--text-primary) !important;
-}
-.dark-mode .auto-settings .dropdown-menu .link-like:hover {
-  background: rgba(255,255,255,0.03) !important;
-}
+.dark-mode .auto-settings .dropdown-menu .link-like { color: var(--text-primary) !important; }
+.dark-mode .auto-settings .dropdown-menu .link-like:hover { background: rgba(255,255,255,0.03) !important; }
 
-/* compact inline controls placed at top-right of the automatic card */
-
-/* Dark-mode: keep metric-card small icon backgrounds pale and readable
-   scoped to the BackupManagement view so other pages aren't affected */
 .dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg { background: rgba(240,240,240,0.06) !important; }
 .dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon .icon-bg.storage { background: rgba(255,75,0,0.12) !important; }
 .dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green { background: rgba(40,167,69,0.12) !important; }
-
-/* Make the middle (total) card slightly lighter so dark/black SVGs remain visible */
 .dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon .icon-bg { background: rgba(250,250,250,0.12) !important; }
 
-/* Force SVG fills / colors to match accents where appropriate */
 .dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon .stat-svg,
-.dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon svg {
-  color: #ff6b00 !important;
-  fill: #ff6b00 !important;
-}
+.dark-mode .dashboard-root.backup-root .metric-card.storage .stat-icon svg { color: #ff6b00 !important; fill: #ff6b00 !important; }
 .dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green .stat-svg,
-.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green svg {
-  color: #0b8f36 !important;
-  fill: #0b8f36 !important;
-}
+.dark-mode .dashboard-root.backup-root .metric-card .stat-icon .icon-bg.green svg { color: #0b8f36 !important; fill: #0b8f36 !important; }
 .dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon .stat-svg,
-.dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon svg {
-  color: #111 !important;
-  fill: #111 !important;
-}
+.dark-mode .dashboard-root.backup-root .metric-card.total .stat-icon svg { color: #111 !important; fill: #111 !important; }
+
 .auto-inline { position: absolute; top: 12px; right: 18px; display:flex; align-items:center; gap:10px }
 .auto-inline .auto-inline-label { font-size:13px; color:#666; margin-right:6px }
 .auto-inline .toggle-switch { display:inline-block }
@@ -291,13 +242,13 @@
 .auto-inline .toggle-switch input:checked + .slider { background:#FF4B00 }
 .auto-inline .toggle-switch input:checked + .slider:before { transform: translateX(24px) }
 
-/* Responsive */
 @media (max-width: 980px) {
   .backup-grid { grid-template-columns: 1fr; }
   .right-panel .card { position: static; top: auto }
+  .history-item { flex-direction: column; align-items: flex-start; gap: 8px }
+  .hi-right { width: 100%; justify-content: space-between }
 }
 
-/* Buttons: base and danger variant */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -316,9 +267,7 @@
 .btn:active { transform: translateY(0); }
 .btn[disabled], .btn[aria-disabled='true'] { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-/* Danger / destructive button */
 .btn.danger {
-  /* Red-dominant destructive button with orange accent to match the app theme */
   background: linear-gradient(90deg,#e53935 0%, #ff7b00 100%);
   color: #fff;
   border: none;
@@ -330,9 +279,7 @@
   box-shadow: 0 6px 14px rgba(229,59,59,0.12);
 }
 .btn.danger:hover { box-shadow: 0 10px 22px rgba(229,59,59,0.14); transform: translateY(-1px); }
-.hi-actions .btn.danger { padding:4px 8px; border-radius:6px; font-size:13px; }
 
-/* Modal / Warning styles */
 .modal {
   position: fixed;
   inset: 0;
@@ -352,17 +299,13 @@
   box-shadow: 0 30px 80px rgba(2,6,23,0.28);
   border: 1px solid rgba(0,0,0,0.04);
 }
-.modal-content h3 { margin:0 0 8px 0; color: #b91c1c } /* dark red title */
+.modal-content h3 { margin:0 0 8px 0; color: #b91c1c }
 .modal-content p { color: #333; margin:0; line-height:1.45 }
 .modal-content p strong { color:#111 }
 .modal .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:14px }
-
-/* Make cancel neutral and delete prominent inside modal */
 .modal .btn { padding:8px 12px; border-radius:8px }
 .modal .btn:not(.danger) { background: transparent; border:1px solid #e6e6e6 }
 .modal .btn.danger { min-width:90px }
-
-/* Ensure primary buttons inside modals are orange across the app */
 .modal .btn.primary {
   background: linear-gradient(90deg,#ff7b00,#ff4b00);
   color: #fff;
@@ -370,7 +313,6 @@
   box-shadow: 0 8px 20px rgba(255,123,0,0.10);
 }
 
-/* Warning row inside modal */
 .warning-row {
   display: flex;
   gap: 14px;
@@ -381,29 +323,10 @@
   border-radius: 8px;
   border-left: 3px solid #ff9800;
 }
+.warning-row p { color: #333; margin: 0; line-height: 1.5; font-size: 14px; }
+.warning-row strong { color: #111; font-weight: 700; }
 
-.warning-row p {
-  color: #333;
-  margin: 0;
-  line-height: 1.5;
-  font-size: 14px;
-}
-
-.warning-row strong {
-  color: #111;
-  font-weight: 700;
-}
-
-.modal-content h3 {
-  margin: 0 0 8px 0;
-  color: #b91c1c;
-}
-
-/* Smooth entrance animations for modals (applies on mount) */
-@keyframes overlayIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes modalIn {
   from { transform: translateY(12px) scale(0.98); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
@@ -411,38 +334,24 @@
 .modal { animation: overlayIn 220ms ease both; }
 .modal-content { transform-origin: top center; animation: modalIn 240ms cubic-bezier(.2,.9,.2,1) both; }
 
-/* Secondary button style for modal cancel */
 .btn.secondary { background: transparent; border:1px solid #e6e6e6; color: #111 }
 .btn.secondary:hover { background: rgba(0,0,0,0.02) }
 
-/* Use a clearer red for delete buttons on the Backup History page */
 .backup-history .btn.danger {
   background: linear-gradient(90deg,#d62828 0%, #b91c1c 100%);
   box-shadow: 0 8px 20px rgba(214,40,40,0.12);
 }
 .backup-history .btn.danger:hover { box-shadow: 0 12px 28px rgba(214,40,40,0.16); transform: translateY(-2px); }
 
-/* Softer red for delete buttons on Backup Management page (less harsh) */
 .backup-root .btn.danger {
   background: linear-gradient(90deg,#f06b6b 0%, #e04141 100%);
   box-shadow: 0 8px 20px rgba(224,65,65,0.10);
   color: #fff;
 }
 .backup-root .btn.danger:hover { box-shadow: 0 12px 28px rgba(224,65,65,0.14); transform: translateY(-1px); }
-.hi-actions .btn.danger { padding:4px 8px; border-radius:6px; font-size:13px }
 
-/* Day entry list inside Backup History */
-.day-list { margin-top:8px; display:flex; flex-direction:column; gap:6px }
-.day-entry { display:flex; align-items:center; gap:10px }
-.entry-time { font-weight:700; width:68px; color:#222 }
-.type-pill { font-size:12px; padding:4px 8px; border-radius:999px; text-transform:capitalize; font-weight:700 }
-.type-pill.automatic { background: rgba(11,143,54,0.08); color:#0b8f36 }
-.type-pill.manual { background: rgba(255,152,0,0.08); color:#ff9800 }
-
-/* Small alignment nudge for Backup History page to match Backup Management */
 .backup-history .card { margin-left: -2px; }
 
-/* Toast notification (top-right corner) */
 .toast-notification {
   position: fixed;
   top: 24px;
@@ -459,18 +368,9 @@
   animation: toastSlideIn 300ms cubic-bezier(.2,.9,.2,1) both;
   border-left: 4px solid #ff7b00;
 }
-
-.toast-notification.success {
-  border-left-color: #ff7b00;
-}
-
-.toast-notification.error {
-  border-left-color: #d62828;
-}
-
-.toast-notification.info {
-  border-left-color: #ff7b00;
-}
+.toast-notification.success { border-left-color: #ff7b00; }
+.toast-notification.error { border-left-color: #d62828; }
+.toast-notification.info { border-left-color: #ff7b00; }
 
 .toast-icon {
   width: 32px;
@@ -485,32 +385,12 @@
   font-size: 18px;
   flex-shrink: 0;
 }
+.toast-notification.error .toast-icon { background: linear-gradient(135deg, #d62828, #e53935); }
+.toast-notification.info .toast-icon { background: linear-gradient(135deg, #ff7b00, #ff4b00); }
 
-.toast-notification.error .toast-icon {
-  background: linear-gradient(135deg, #d62828, #e53935);
-}
-
-.toast-notification.info .toast-icon {
-  background: linear-gradient(135deg, #ff7b00, #ff4b00);
-}
-
-.toast-message {
-  font-size: 14px;
-  font-weight: 600;
-  color: #222;
-  line-height: 1.4;
-}
+.toast-message { font-size: 14px; font-weight: 600; color: #222; line-height: 1.4; }
 
 @keyframes toastSlideIn {
-  from {
-    transform: translateX(120%) translateY(-8px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0) translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateX(120%) translateY(-8px); opacity: 0; }
+  to { transform: translateX(0) translateY(0); opacity: 1; }
 }
-
-
-
