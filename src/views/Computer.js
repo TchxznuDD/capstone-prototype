@@ -9,7 +9,6 @@ import { ReactComponent as OfflineIcon } from "../assets/offline.svg";
 // header is provided by shared component
 
 export default function Dashboard() {
-  const stats = { total: 12, online: 9, offline: 3 };
   const initialBuildings = [
     {
       id: 'rev',
@@ -23,36 +22,15 @@ export default function Dashboard() {
         { id:'rev-03', name:'Revenue Workstation 3', host:'REV-03', ip:'192.168.1.12', uptime:'38h 15m', status:'online', lastSeen:'Active now'},
         { id:'rev-04', name:'Revenue Workstation 4', host:'REV-04', ip:'192.168.1.13', uptime:'52h 30m', status:'online', lastSeen:'Active now'}
       ]
-    },
-    {
-      id: 'vawc',
-      name: 'VAWC Building',
-      subtitle: 'Community Center',
-      online: 1,
-      offline: 2,
-      stations: [
-        { id:'vawc-01', name:'VAWC Station', host:'VAWC-01', ip:'192.168.1.20', uptime:'0h 0m', status:'offline', lastSeen:'2 hours ago'},
-        { id:'vawc-02', name:'VAWC Workstation 2', host:'VAWC-02', ip:'192.168.1.21', uptime:'24h 45m', status:'online', lastSeen:'Active now'},
-        { id:'vawc-03', name:'VAWC Workstation 3', host:'VAWC-03', ip:'192.168.1.22', uptime:'0h 0m', status:'offline', lastSeen:'5 hours ago'}
-      ]
-    },
-    {
-      id: 'leg',
-      name: 'Legislative Building',
-      subtitle: 'Government Complex',
-      online: 4,
-      offline: 1,
-      stations: [
-        { id:'leg-01', name:'Legislative Workstation 1', host:'LEG-01', ip:'192.168.1.30', uptime:'72h 15m', status:'online', lastSeen:'Active now' },
-        { id:'leg-02', name:'Legislative Workstation 2', host:'LEG-02', ip:'192.168.1.31', uptime:'72h 10m', status:'online', lastSeen:'Active now' },
-        { id:'leg-03', name:'Legislative Workstation 3', host:'LEG-03', ip:'192.168.1.32', uptime:'48h 05m', status:'online', lastSeen:'Active now' },
-        { id:'leg-04', name:'Legislative Workstation 4', host:'LEG-04', ip:'192.168.1.33', uptime:'0h 0m', status:'offline', lastSeen:'30 minutes ago' },
-        { id:'leg-05', name:'Legislative Workstation 5', host:'LEG-05', ip:'192.168.1.34', uptime:'36h 42m', status:'online', lastSeen:'Active now' }
-      ]
     }
   ];
 
   const [buildings, setBuildings] = useState(initialBuildings);
+  const stats = buildings.reduce((summary, building) => ({
+    total: summary.total + building.stations.length,
+    online: summary.online + building.online,
+    offline: summary.offline + building.offline
+  }), { total: 0, online: 0, offline: 0 });
 
   // Notification state
   const [notification, setNotification] = useState(null);
@@ -206,38 +184,6 @@ export default function Dashboard() {
     setModalOpen(false);
   }
 
-  // --- Add Building modal state and handlers ---
-  const [buildingModalOpen, setBuildingModalOpen] = useState(false);
-  const [buildingForm, setBuildingForm] = useState({ name: '', subtitle: '' });
-
-  function openAddBuildingModal() {
-    setBuildingForm({ name: '', subtitle: '' });
-    setBuildingModalOpen(true);
-  }
-
-  function closeBuildingModal() {
-    setBuildingModalOpen(false);
-  }
-
-  function handleSaveBuilding() {
-    // Validate building name
-    if (!buildingForm.name || !buildingForm.name.trim()) {
-      showNotification('Please enter a building name', 'error');
-      return;
-    }
-
-    const name = (buildingForm.name || 'New Building').trim();
-    const subtitle = (buildingForm.subtitle || '').trim();
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const id = `${slug || 'building'}-${String(Date.now()).slice(-4)}`;
-    const newBuilding = { id, name, subtitle, online: 0, offline: 0, stations: [] };
-    setBuildings(prev => [...prev, newBuilding]);
-    // make the new building selected for immediate Add PC actions
-    setModalBuilding(id);
-    showNotification('Building added successfully!', 'success');
-    setBuildingModalOpen(false);
-  }
-
   // --- Centralized Edit selection modal handlers ---
   function openSelectEditModal() {
     if (buildings.length) {
@@ -318,7 +264,6 @@ export default function Dashboard() {
               <div className={`options-menu ${optionsOpen ? 'open' : ''}`} role="menu" aria-hidden={!optionsOpen}>
                 <button className="options-item" onClick={() => { openAddModal(); setOptionsOpen(false); }}>Add PC</button>
                 <button className="options-item" onClick={() => { openSelectEditModal(); setOptionsOpen(false); }}>Edit PC Details</button>
-                <button className="options-item" onClick={() => { openAddBuildingModal(); setOptionsOpen(false); }}>Add Building</button>
               </div>
             </div>
           <button className="refresh-btn">Refresh ↻</button>
@@ -407,7 +352,6 @@ export default function Dashboard() {
       </main>
 
       <AddEditModal open={modalOpen} mode={modalMode} buildings={buildings} buildingId={modalBuilding} setBuildingId={setModalBuilding} onClose={() => setModalOpen(false)} onSave={handleSaveModal} form={form} setForm={setForm} />
-      <AddBuildingModal open={buildingModalOpen} onClose={closeBuildingModal} onSave={handleSaveBuilding} form={buildingForm} setForm={setBuildingForm} />
       <SelectEditModal open={selectEditOpen} onClose={closeSelectEditModal} buildings={buildings} buildingId={selectBuilding} setBuildingId={setSelectBuilding} stationId={selectStationId} setStationId={setSelectStationId} onConfirm={handleConfirmSelectEdit} />
       <DeleteConfirmModal open={deleteModalOpen} onClose={closeDeleteModal} onConfirm={handleConfirmDelete} stationName={deleteTarget.stationName} password={deletePassword} setPassword={setDeletePassword} />
 

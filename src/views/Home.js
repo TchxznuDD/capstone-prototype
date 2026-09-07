@@ -239,7 +239,6 @@ export default function Home() {
 						<p className="muted">Common maintenance and response actions for the site.</p>
 						<div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
 							<button className="action-btn">Start Backup</button>
-							<button className="action-btn">Schedule Maintenance</button>
 							<Link to="/user-manual" className="action-btn">User Manual</Link>
 							<Link to="/settings" className="action-btn">Settings</Link>
 						</div>
